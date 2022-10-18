@@ -1,0 +1,4 @@
+abcdq
+bbbbaabb
+aa->a
+bb->b
