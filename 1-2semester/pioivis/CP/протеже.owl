@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/user/ontologies/2022/3/untitled-ontology-4"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/user/ontologies/2022/3/untitled-ontology-4">
+    <Prefix name="" IRI="http://www.semanticweb.org/user/ontologies/2022/3/untitled-ontology-4"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Астрономы"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Национальность_астрономов"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Туманность"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#арабы"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#астрономический_объект"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#астрономическое_явление"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#газообразная_туманность"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#звезда"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#китайцы"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#планета"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#плерион"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#сверхновая"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#созвездие"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#быть_записанным"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#быть_открытым"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#находиться_в"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#отождествление_с"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#являться_остатком_от"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#год_записи"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#год_открытыя"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#иметь_диаметр"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#расстояние_до_Земли"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#скорость_расширения"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SN_1054"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Джон_Бевис"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Земля"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Созвездие_Тельца"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#арабские_астрономы"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#китайские_астрономы"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Национальность_астрономов"/>
+        <Class IRI="#Астрономы"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Туманность"/>
+        <Class IRI="#астрономический_объект"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#арабы"/>
+        <Class IRI="#Национальность_астрономов"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#газообразная_туманность"/>
+        <Class IRI="#Туманность"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#звезда"/>
+        <Class IRI="#астрономический_объект"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#китайцы"/>
+        <Class IRI="#Национальность_астрономов"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#планета"/>
+        <Class IRI="#астрономический_объект"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#сверхновая"/>
+        <Class IRI="#звезда"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#созвездие"/>
+        <Class IRI="#астрономический_объект"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#астрономический_объект"/>
+        <NamedIndividual IRI="#SN_1054"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#сверхновая"/>
+        <NamedIndividual IRI="#SN_1054"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Астрономы"/>
+        <NamedIndividual IRI="#Джон_Бевис"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#астрономический_объект"/>
+        <NamedIndividual IRI="#Земля"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#планета"/>
+        <NamedIndividual IRI="#Земля"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Туманность"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#астрономический_объект"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#газообразная_туманность"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#плерион"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#астрономический_объект"/>
+        <NamedIndividual IRI="#Созвездие_Тельца"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#созвездие"/>
+        <NamedIndividual IRI="#Созвездие_Тельца"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#арабы"/>
+        <NamedIndividual IRI="#арабские_астрономы"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#астрономическое_явление"/>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#китайцы"/>
+        <NamedIndividual IRI="#китайские_астрономы"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#быть_открытым"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <NamedIndividual IRI="#Джон_Бевис"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#находиться_в"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <NamedIndividual IRI="#Созвездие_Тельца"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#отождествление_с"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#являться_остатком_от"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <NamedIndividual IRI="#SN_1054"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#быть_записанным"/>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+        <NamedIndividual IRI="#арабские_астрономы"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#быть_записанным"/>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+        <NamedIndividual IRI="#китайские_астрономы"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#год_открытыя"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#int">1731</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#иметь_диаметр"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <Literal>11 световых лет (3,4 пк)</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#расстояние_до_Земли"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <Literal>6500 световых лет (2 кпк)</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#скорость_расширения"/>
+        <NamedIndividual IRI="#Крабовидная_туманность"/>
+        <Literal>1500 км/с</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#год_записи"/>
+        <NamedIndividual IRI="#взрыв_сверхновой"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#int">1054</Literal>
+    </DataPropertyAssertion>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#быть_записанным"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#быть_открытым"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#находиться_в"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#отождествление_с"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#являться_остатком_от"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#быть_записанным"/>
+        <Class IRI="#Астрономы"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#быть_открытым"/>
+        <Class IRI="#Астрономы"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#находиться_в"/>
+        <Class IRI="#созвездие"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#отождествление_с"/>
+        <Class IRI="#астрономическое_явление"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#являться_остатком_от"/>
+        <Class IRI="#астрономический_объект"/>
+    </ObjectPropertyRange>
+    <DataPropertyDomain>
+        <DataProperty IRI="#год_записи"/>
+        <Class IRI="#астрономическое_явление"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#год_открытыя"/>
+        <Class IRI="#астрономический_объект"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#иметь_диаметр"/>
+        <Class IRI="#астрономический_объект"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#расстояние_до_Земли"/>
+        <Class IRI="#астрономический_объект"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#скорость_расширения"/>
+        <Class IRI="#астрономический_объект"/>
+    </DataPropertyDomain>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
