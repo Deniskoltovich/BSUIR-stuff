@@ -1,3 +1,10 @@
+MAX_EXPONENT_VAL = 127
+BITS_IN_DENORMALIZED_MANTISSA = 16
+BITS_IN_FLOAT = 32
+BITS_IN_BINARY_INT = 8
+BITS_IN_MANTISSA = 23
+
+
 def decimal_to_binary(number: int) -> list:
     save_number = number
     number = abs(number)
@@ -7,12 +14,12 @@ def decimal_to_binary(number: int) -> list:
         number //= 2
     binary.append(0 if save_number >= 0 else 1)
     binary = binary[::-1]
-    binary = binary[:1] + [0] * (8 - len(binary)) + binary[1:]
+    binary = binary[:1] + [0] * (BITS_IN_BINARY_INT - len(binary)) + binary[1:]
     return binary
 
 
 def floating_point_to_decimal(floating_point_number):
-    decimal_degree: int = convert_to_decimal([0] + floating_point_number[1]) - 127
+    decimal_degree: int = convert_to_decimal([0] + floating_point_number[1]) - MAX_EXPONENT_VAL
     digit_degree = 0
     mantissa_result: float = 0
     for digit in floating_point_number[2]:
@@ -110,7 +117,7 @@ def binary_numbers_division(num1: list, x2: list):
         shift = True
         sub = True
     # TODO можно ремайндер добавить
-    return [int(num1[0] + x2[0] == 1)] + [0] * (8 - len(quotient) - 1) + quotient
+    return [int(num1[0] + x2[0] == 1)] + [0] * (BITS_IN_BINARY_INT - len(quotient) - 1) + quotient
 
 
 def get_max_from_binary(num1: list, num2: list, signed=False) -> list:
@@ -124,7 +131,7 @@ def get_max_from_binary(num1: list, num2: list, signed=False) -> list:
 def summ(num1: list, num2: list, num_size: int | None = None):
     unsigned_num1, unsigned_num1 = [], []
     if not num_size:
-        unsigned_num1, unsigned_num2 = normalize_length(num1, num2, length=8)
+        unsigned_num1, unsigned_num2 = normalize_length(num1, num2, length=BITS_IN_BINARY_INT)
     else:
         unsigned_num1, unsigned_num2 = normalize_length(num1, num2, length=num_size)
     num1, num2 = num1[:1] + unsigned_num1, num2[:1] + unsigned_num2
@@ -184,22 +191,23 @@ def convert_to_decimal(binary_number: list[int]) -> int:
 
 def create_mantissa(binary_number: str) -> str:
     mantissa = binary_number[binary_number.find("1"):]
-    if len(mantissa) < 23:
-        mantissa += "0" * (23 - len(mantissa))
+    if len(mantissa) < BITS_IN_MANTISSA:
+        mantissa += "0" * (BITS_IN_MANTISSA - len(mantissa))
     else:
-        mantissa = mantissa[:23]
+        mantissa = mantissa[:BITS_IN_MANTISSA]
     return mantissa
 
 
 def create_exponent(digit_order: int) -> list:
-    exponent: list = summ(decimal_to_binary(127), decimal_to_binary(digit_order), num_size=9)[1:]
-    exponent = [0] * (8 - len(exponent)) + exponent
+    exponent: list = summ(decimal_to_binary(MAX_EXPONENT_VAL), decimal_to_binary(digit_order),
+                          num_size=BITS_IN_BINARY_INT + 1)[1:]
+    exponent = [0] * (BITS_IN_BINARY_INT - len(exponent)) + exponent
     return exponent
 
 
 def normalize_bin_float(number: int) -> list:
     sign = "1" if number < 0 else "0"
-    binary_number = float_to_binary(number, numsize=32)[1:]
+    binary_number = float_to_binary(number, numsize=BITS_IN_FLOAT)[1:]
     digit_order = binary_number.find(".") - (binary_number.find("1") + 1)
     digit_order += 1 if digit_order < 0 else 0
     binary_number_list: list = list(binary_number)
@@ -208,7 +216,7 @@ def normalize_bin_float(number: int) -> list:
     return [sign, create_exponent(digit_order), create_mantissa(binary_number)]
 
 
-def float_to_binary(number: float, numsize: int = 16) -> str:
+def float_to_binary(number: float, numsize: int = BITS_IN_DENORMALIZED_MANTISSA) -> str:
     sign = "1" if number < 0 else "0"
     number = abs(number)
     int_part = int(number)
