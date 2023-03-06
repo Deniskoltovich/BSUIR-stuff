@@ -1,0 +1,70 @@
+lab1=[*
+	sc_node_struct->section_subject_domain_of_football;;
+
+	section_subject_domain_of_school_education<=nrel_section_decomposition:{
+		section_subject_domain_of_lower_secondary_education(*<-sc_node_struct;;*);
+		section_subject_domain_of_upper_secondary_education(*<-sc_node_struct;;*);
+	};;
+	section_subject_domain_of_school_education->rrel_key_sc_element:subject_domain_of_school_education(*<-sc_node_struct;;*);
+        concept_student(*<-sc_node_class;;*);
+        concept_teacher(*<-sc_node_class;;*);
+        concept_gymnasium(*<-sc_node_class;;*);
+        concept_liceum(*<-sc_node_class;;*);
+        concept_school(*<-sc_node_class;;*);
+        concept_private_school(*<-sc_node_class;;*);
+        concept_public_school(*<-sc_node_class;;*);
+        nrel_number_of_students(*<-sc_node_norole_relation;;*);
+        nrel_lesson_time(*<-sc_node_norole_relation;;*);
+        nrel_school_subject(*<-sc_node_norole_relation;;*);;
+        /* nrel_field_size(*<-sc_node_norole_relation;;*);
+        nrel_gates_size(*<-sc_node_norole_relation;;*); 
+	    nrel_foul(*<-sc_node_norole_relation;;*);
+        nrel_goal(*<-sc_node_norole_relation;;*);
+        nrel_number_of_players(*<-sc_node_norole_relation;;*);;
+                                                                */
+
+    section_subject_domain_of_school_education => nrel_main_idtf:
+    	[Раздел.Предметная область школьное образование]
+        	(* <- lang_ru;; *);;
+
+	section_subject_domain_of_school_education => nrel_main_idtf:
+		[Section.Subject domain of scjool education]
+        	(* <- lang_en;; *);;
+    
+    subject_domain_of_school_education -> rel_not_maximum_studied_object_class:concept_public_school;
+                                       -> rel_not_maximum_studied_object_class:concept_private_school;;
+	//concept_school<-rrel_not_maximum_studied_object_class:subject_domain_of_school_education;; 
+    
+	section_subject_domain_of_fschool_education<-non_atomic_section;;   
+
+	subject_domain_of_school_education => nrel_main_idtf:
+        	[Предметная область школьное образование]
+        	(* <- lang_ru;; *);;
+    
+    subject_domain_of_school_education => nrel_main_idtf:
+        	[Subject domain of school education]
+        	(* <- lang_en;; *);;
+
+    subject_domain_of_school_education=>nrel_private_subject_domain:
+		    subject_domain_of_lower_secondary_education(*<-sc_node_struct;;*);
+        	subject_domain_of_upper_secondary_education(*<-sc_node_struct;;*);
+
+	subject_domain_of_school_education<=nrel_private_subject_domain:subject_domain_of_education(*<-sc_node_struct;;*);;
+
+    subject_domain_of_school_education->rrel_maximum_studied_object_class:concept_school;;
+    
+        subject_domain_of_school_education->rrel_explored_relation:
+        	nrel_lesson_time;
+            nrel_number_of_students;
+            nrel_school_subject;;
+    	subject_domain_of_school_educationl<-subject_domain;;
+*];;
+
+
+
+
+
+
+
+
+
