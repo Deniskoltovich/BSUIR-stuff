@@ -34,7 +34,7 @@ class Context:
         self.vars = sorted(self.get_set_of_vars())
         self.logical_expression = LogicalExpression(tokens=self.tokens)
         self.truth_table = []
-        self.solve_formula()
+        self.evaluate()
 
     def get_index_form(self) -> int:
         return sum([2 ** index * implementation.value for index, implementation in enumerate(self.truth_table[::-1])])
@@ -94,7 +94,7 @@ class Context:
         variables = set(re.findall(pattern, self.logical_sentence))
         return variables
 
-    def solve_formula(self):
+    def evaluate(self):
         permutations = sorted(list(product([0, 1], repeat=len(self.vars))))
         for perm in permutations:
             interpret = {self.vars[i]: perm[i] for i in range(len(self.vars))}
