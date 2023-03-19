@@ -31,7 +31,7 @@ class Context:
         self.logical_sentence: str = logic_sentence.replace('=>', '→').replace('<=>', '↔')
         self.tokens = []
         self.tokens = self.get_tokens()
-        self.variables = sorted(self.get_set_of_vars())
+        self.vars = sorted(self.get_set_of_vars())
         self.logical_expression = LogicalExpression(tokens=self.tokens)
         self.truth_table = []
         self.solve_formula()
@@ -95,13 +95,13 @@ class Context:
         return variables
 
     def solve_formula(self):
-        permutations = sorted(list(product([0, 1], repeat=len(self.variables))))
+        permutations = sorted(list(product([0, 1], repeat=len(self.vars))))
         for perm in permutations:
-            interpret = {self.variables[i]: perm[i] for i in range(len(self.variables))}
+            interpret = {self.vars[i]: perm[i] for i in range(len(self.vars))}
             self.logical_expression.evaluate(interpret, self.truth_table)
 
     def print_table(self):
-        for var in self.variables:
+        for var in self.vars:
             print(var, end='\t')
         print(self.logical_sentence)
         for inter in self.truth_table:
@@ -207,14 +207,14 @@ class TruthTableRow:
         self.value = value
 
 
-formula: str = '!((x1+!x2)*!(x1*!x3))'
+logical_expression: str = '!((x1+!x2)*!(x1*!x3))'
 # formula: str = 'x1*x2+x3'
 # formula: str = '(x1+x2)*x3*(x2+x4)'
 # formula: str = 'x1 => x2'
-formula_solver = Context(formula)
-formula_solver.print_table()
-print(f"PCNF: {formula_solver.get_pcnf()}\n")
-print(f'PCNF number form: {formula_solver.get_pcnf_number_form()}\n')
-print(f"PDNF: {formula_solver.get_pdnf()}\n", )
-print(f'PDNF number form: {formula_solver.get_pdnf_number_form()}\n')
-print(f'Index form = {formula_solver.get_index_form()}\n')
+context = Context(logical_expression)
+context.print_table()
+print(f"PCNF: {context.get_pcnf()}\n")
+print(f'PCNF number form: {context.get_pcnf_number_form()}\n')
+print(f"PDNF: {context.get_pdnf()}\n", )
+print(f'PDNF number form: {context.get_pdnf_number_form()}\n')
+print(f'Index form = {context.get_index_form()}\n')
