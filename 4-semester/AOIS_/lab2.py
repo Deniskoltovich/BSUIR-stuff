@@ -6,37 +6,13 @@ from itertools import product
 
 class Tokens(Enum):
     VARIABLE = 0
-    LEFT_BRACKET = 0
+    LEFT_BRACKET = 1
     RIGHT_BRACKET = 2
     INVERSION = 3
     CONJUNCTION = 4
     DISJUNCTION = 5
     IMPLICATION = 6
     EQUIVALENCE = 7
-
-
-class Token:
-    def __init__(self, type: Tokens, value, priority: int):
-        self.type = type
-        self.value = value
-        self.priority = priority
-
-
-class PriorityOfOperations:
-    def __init__(self):
-        self.operations = {
-            Tokens.LEFT_BRACKET: 0,
-            Tokens.VARIABLE: 0,
-            Tokens.RIGHT_BRACKET: 0,
-            Tokens.INVERSION: 1,
-            Tokens.CONJUNCTION: 2,
-            Tokens.DISJUNCTION: 3,
-            Tokens.IMPLICATION: 4,
-            Tokens.EQUIVALENCE: 5
-        }
-
-    def __getitem__(self, item):
-        return self.operations[item]
 
 
 class Context:
@@ -199,6 +175,30 @@ class LogicalExpression:
                     self.var_stack.append(int((not left_operand) or right_operand))
                 case Tokens.EQUIVALENCE:
                     self.var_stack.append(int(left_operand == right_operand))
+
+
+class Token:
+    def __init__(self, type: Tokens, value, priority: int):
+        self.type = type
+        self.value = value
+        self.priority = priority
+
+
+class PriorityOfOperations:
+    def __init__(self):
+        self.operations = {
+            Tokens.LEFT_BRACKET: 0,
+            Tokens.VARIABLE: 0,
+            Tokens.RIGHT_BRACKET: 0,
+            Tokens.INVERSION: 1,
+            Tokens.CONJUNCTION: 2,
+            Tokens.DISJUNCTION: 2,
+            Tokens.IMPLICATION: 3,
+            Tokens.EQUIVALENCE: 4,
+        }
+
+    def __getitem__(self, item):
+        return self.operations[item]
 
 
 class TruthTableRow:
