@@ -1,4 +1,4 @@
-from quaine import Minimizer
+from lab3.lab_lib import Minimizer
 
 if __name__ == '__main__':
     formula = '((!x1+x2)*(x2=>x3))'
