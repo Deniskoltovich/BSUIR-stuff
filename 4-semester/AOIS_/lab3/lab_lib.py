@@ -121,6 +121,21 @@ class Minimizer:
         neighbor_indexes, founded = self.process_1_cell_area(table, neighbor_indexes, founded)
 
         return self.concat_for_karnough(table, neighbor_indexes)
+    
+    def get_4_area_implicant(self, table, item):
+        implicant1 = table[item[0]][0] + self.operation_in_constituents + table[0][item[2]]
+        implicant2 = table[item[1]][0] + self.operation_in_constituents + table[0][item[3]]
+        implicant = self.union_karnough_implicants(implicant1, implicant2)
+        return implicant
+    
+    def get_square_area_implicant(self, table, item, inversion):
+        implicant: str = f'{table[item[0]][0]}{self.operation_in_constituents}{table[0][item[1]]}'
+        if inversion:
+            implicant = self.operation_in_constituents.join(
+                list(map(lambda x: f'!{x}' if x.find('!') == -1 else x.replace('!', ''),
+                         implicant.split(self.operation_in_constituents))))
+            
+        return implicant
 
     def concat_for_karnough(self, table, neigthboor_indexes):
         implicants = []
@@ -132,22 +147,12 @@ class Minimizer:
                     implicant = implicant.replace('!', '') if implicant.find('!') != -1 else f'!{implicant}'
                 else:
                     implicant = implicant if implicant.find('!') != -1 else implicant.replace('!', '')
-
             elif len(item) == 2:
-                implicant: str = f'{table[item[0]][0]}{self.operation_in_constituents}{table[0][item[1]]}'
-                if inversion:
-                    implicant = self.operation_in_constituents.join(
-                        list(map(lambda x: f'!{x}' if x.find('!') == -1 else x.replace('!', ''),
-                                 implicant.split(self.operation_in_constituents))))
-
+                implicant: str = self.get_square_area_implicant(table, item, inversion)
             elif len(item) == 3:
-                implicant1 = table[0][item[0]]
-                implicant2 = table[0][item[1]]
-                implicant = self.union_karnough_implicants(implicant1, implicant2)
+                implicant = self.union_karnough_implicants(table[0][item[0]], table[0][item[1]])
             else:
-                implicant1 = table[item[0]][0] + self.operation_in_constituents + table[0][item[2]]
-                implicant2 = table[item[1]][0] + self.operation_in_constituents + table[0][item[3]]
-                implicant = self.union_karnough_implicants(implicant1, implicant2)
+                implicant = self.get_4_area_implicant(table, item)
 
             implicants.append(f'({implicant})')
 
