@@ -41,88 +41,86 @@ class Minimizer:
             if i not in founded: return False
 
         return True
-    
-    def process_4_cell_line(self, table, neigthboor_indexes, founded):
+
+    def process_4_cell_line(self, table, neighbor_indexes, founded):
         for row_ind, row in enumerate(table):
             if row_ind == 0: continue
             if row.count(self.constant) == 4:
-                neigthboor_indexes.append([row_ind])
+                neighbor_indexes.append([row_ind])
                 founded.extend([[row_ind, 0], [row_ind, 1], [row_ind, 2], [row_ind, 3], [row_ind, 4]])
                 continue
-            
-        return neigthboor_indexes, founded
-    
-    def is_normal_square_area(self, table, col_value, col_ind, row_ind, founded)-> bool:
+
+        return neighbor_indexes, founded
+
+    def is_normal_square_area(self, table, col_value, col_ind, row_ind, founded) -> bool:
         return col_ind != 4 and col_value == self.constant \
-                and table[row_ind][col_ind + 1] == self.constant \
-                and row_ind != 2 and table[row_ind + 1][col_ind] == self.constant \
-                and table[row_ind + 1][col_ind + 1] == self.constant and not self.is_processed_cells(
-                [[row_ind, col_ind], [row_ind + 1, col_ind + 1], [row_ind + 1, col_ind], [row_ind, col_ind + 1]], founded)
-    
-    def is_diff_side_square_area(self, table, col_value, col_ind, row_ind, founded)-> bool:
+            and table[row_ind][col_ind + 1] == self.constant \
+            and row_ind != 2 and table[row_ind + 1][col_ind] == self.constant \
+            and table[row_ind + 1][col_ind + 1] == self.constant and not self.is_processed_cells(
+                [[row_ind, col_ind], [row_ind + 1, col_ind + 1], [row_ind + 1, col_ind], [row_ind, col_ind + 1]],
+                founded)
+
+    def is_diff_side_square_area(self, table, col_value, col_ind, row_ind, founded) -> bool:
         return row_ind != 2 and col_ind == 1 and col_value == self.constant \
-                and table[row_ind + 1][col_ind] == self.constant and \
-                        table[row_ind][4] == self.constant and table[row_ind + 1][4] == self.constant \
-                and not self.is_processed_cells([[row_ind, col_ind], [row_ind + 1, col_ind], \
-                    [row_ind, 4], [row_ind + 1, 4]], founded)
-            
-            
-    def process_4_cell_square(self, table, neigthboor_indexes, founded): 
+            and table[row_ind + 1][col_ind] == self.constant and \
+            table[row_ind][4] == self.constant and table[row_ind + 1][4] == self.constant \
+            and not self.is_processed_cells([[row_ind, col_ind], [row_ind + 1, col_ind], \
+                                             [row_ind, 4], [row_ind + 1, 4]], founded)
+
+    def process_4_cell_square(self, table, neighbor_indexes, founded):
         for row_ind, row in enumerate(table):
             if row_ind == 0: continue
             for col_ind, col_value in enumerate(row):
                 if col_ind == 0: continue
                 if self.is_normal_square_area(table, col_value, col_ind, row_ind, founded):
-                    neigthboor_indexes.append([col_ind, col_ind + 1, 0])
+                    neighbor_indexes.append([col_ind, col_ind + 1, 0])
                     founded.extend([[row_ind, col_ind], [row_ind + 1, col_ind + 1], [row_ind + 1, col_ind],
                                     [row_ind, col_ind + 1]])
-                    
+
                 if self.is_diff_side_square_area(table, col_value, col_ind, row_ind, founded):
-                    neigthboor_indexes.append([col_ind, 4, 0])
+                    neighbor_indexes.append([col_ind, 4, 0])
                     founded.extend([[row_ind, col_ind], [row_ind + 1, col_ind], [row_ind, 4], [row_ind + 1, 4]])
-        return neigthboor_indexes, founded
-    
-    def process_2_cell_area(self, table, neigthboor_indexes, founded): 
+        return neighbor_indexes, founded
+
+    def process_2_cell_area(self, table, neighbor_indexes, founded):
         for row_ind, row in enumerate(table):
             if row_ind == 0: continue
             for col_ind, col_value in enumerate(row):
                 if col_ind == 0: continue
                 if row_ind != 2 and col_value == self.constant and table[row_ind + 1][col_ind] == self.constant \
                         and ([row_ind, col_ind] not in founded or [row_ind + 1, col_ind] not in founded):
-                    neigthboor_indexes.append([row_ind, row_ind + 1, col_ind, col_ind])
+                    neighbor_indexes.append([row_ind, row_ind + 1, col_ind, col_ind])
                     founded.extend([[row_ind, col_ind], [row_ind + 1, col_ind]])
                 if col_ind != 4 and col_value == self.constant and table[row_ind][col_ind + 1] == self.constant \
                         and ([row_ind, col_ind] not in founded or [row_ind, col_ind + 1] not in founded):
-                    neigthboor_indexes.append([row_ind, row_ind, col_ind, col_ind + 1])
+                    neighbor_indexes.append([row_ind, row_ind, col_ind, col_ind + 1])
                     founded.extend([[row_ind, col_ind], [row_ind, col_ind + 1]])
                 if col_ind == 1 and col_value == self.constant and row[-1] == self.constant \
                         and ([row_ind, 4] not in founded or [row_ind, col_ind] not in founded):
-                    neigthboor_indexes.append([row_ind, row_ind, col_ind, -1])
+                    neighbor_indexes.append([row_ind, row_ind, col_ind, -1])
                     founded.extend([[row_ind, col_ind], [row_ind, 4]])
-        return neigthboor_indexes, founded
-    
-    def process_1_cell_area(self, table, neigthboor_indexes, founded): 
+        return neighbor_indexes, founded
+
+    def process_1_cell_area(self, table, neighbor_indexes, founded):
         for row_ind, row in enumerate(table):
             if row_ind == 0: continue
             for col_ind, col_value in enumerate(row):
                 if col_ind == 0: continue
                 if col_value == self.constant and [row_ind, col_ind] not in founded:
-                    neigthboor_indexes.append([row_ind, col_ind])
+                    neighbor_indexes.append([row_ind, col_ind])
                     founded.append([row_ind, col_ind])
-                    
-        return neigthboor_indexes, founded
-    
-        
+
+        return neighbor_indexes, founded
 
     def process_table(self, table):
-        neigthboor_indexes = []
+        neighbor_indexes = []
         founded = []
-        neigthboor_indexes, founded = self.process_4_cell_line(table, neigthboor_indexes, founded)
-        neigthboor_indexes, founded = self.process_4_cell_square(table, neigthboor_indexes, founded)
-        neigthboor_indexes, founded = self.process_2_cell_area(table, neigthboor_indexes, founded)
-        neigthboor_indexes, founded = self.process_1_cell_area(table, neigthboor_indexes, founded)
+        neighbor_indexes, founded = self.process_4_cell_line(table, neighbor_indexes, founded)
+        neighbor_indexes, founded = self.process_4_cell_square(table, neighbor_indexes, founded)
+        neighbor_indexes, founded = self.process_2_cell_area(table, neighbor_indexes, founded)
+        neighbor_indexes, founded = self.process_1_cell_area(table, neighbor_indexes, founded)
 
-        return self.concat_for_karnough(table, neigthboor_indexes)
+        return self.concat_for_karnough(table, neighbor_indexes)
 
     def concat_for_karnough(self, table, neigthboor_indexes):
         implicants = []
@@ -134,13 +132,13 @@ class Minimizer:
                     implicant = implicant.replace('!', '') if implicant.find('!') != -1 else f'!{implicant}'
                 else:
                     implicant = implicant if implicant.find('!') != -1 else implicant.replace('!', '')
-                    
+
             elif len(item) == 2:
-                    implicant: str = f'{table[item[0]][0]}{self.operation_in_constituents}{table[0][item[1]]}'
-                    if inversion:
-                        implicant = list(map(lambda x:  f'!{x}' if x.find('!') == -1 else x.replace('!', ''),
-                                             implicant.split(self.operation_in_constituents)))
-                        implicant = self.operation_in_constituents.join(implicant)
+                implicant: str = f'{table[item[0]][0]}{self.operation_in_constituents}{table[0][item[1]]}'
+                if inversion:
+                    implicant = self.operation_in_constituents.join(
+                        list(map(lambda x: f'!{x}' if x.find('!') == -1 else x.replace('!', ''),
+                                 implicant.split(self.operation_in_constituents))))
 
             elif len(item) == 3:
                 implicant1 = table[0][item[0]]
@@ -185,7 +183,8 @@ class Minimizer:
         if implicants is None:
             implicants = self.implicants
         new_implicants = self.process_implicants_to_reduce(implicants)
-        new_implicants = sorted(set(map(lambda x: f'({x})' if x not in self.vars and x[0] != '(' and x[-1] != ')' else x, new_implicants)))
+        new_implicants = sorted(
+            set(map(lambda x: f'({x})' if x not in self.vars and x[0] != '(' and x[-1] != ')' else x, new_implicants)))
         new_func = self.operation_out_constituents.join(new_implicants)
         if new_func != self.reduced_func:
             self.reduced_func = new_func
@@ -208,7 +207,7 @@ class Minimizer:
         literals_1, literals_2 = self.get_literals(implicant_1), self.get_literals(implicant_2)
         union_literals = [x for x in literals_1]
         union_literals.extend(literals_2)
-        union_literals = set(map(lambda x: x.replace('!',''), union_literals))
+        union_literals = set(map(lambda x: x.replace('!', ''), union_literals))
         if len(union_literals) == len(literals_1):
             new_literals = set(literals_1).intersection(set(literals_2))
             if len(new_literals) != len(literals_1) - 1: return

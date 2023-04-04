@@ -2,7 +2,7 @@ from lab_lib import Minimizer
 
 if __name__ == '__main__':
     formula = '(((!x1)*x2)+(x2=>(!x3)))'
-    
+
     match int(input('\t1 - Расчетный метод\n\t2 - Расчетно-табличный метод\n\t3 - Карно\n\t')):
         case 1:
             minimizer = Minimizer(f'{formula}', mode='CNF')
