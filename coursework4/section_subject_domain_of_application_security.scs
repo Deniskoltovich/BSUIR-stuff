@@ -1,0 +1,35 @@
+section_subject_domain_of_application_security <- sc_node_struct;;
+
+section_subject_domain_of_application_security
+=> nrel_main_idtf:
+	[Section. Subject domain of application security]
+	(*<- lang_en;; *);
+	[Раздел. Предметная область безопасности приложений]
+	(* <- lang_ru;; *);
+=> nrel_idtf:
+	[Раздел ИИС по кибербезопасности, описывающий безопасность приложений]
+	(* <- lang_ru;; *);
+
+<- not_enough_formed_structure;
+
+<= nrel_section_decomposition:
+{
+section_subject_domain_of_application_security_testing;
+section_subject_domain_of_application_threats;
+section_subject_domain_of_application_security_vulnerabilities
+};
+
+-> rrel_key_sc_element:
+concept_software;
+concept_threat;
+concept_whitebox_method;
+concept_blackbox_method;
+concept_sql_injection;
+concept_application;
+concept_web_application;
+concept_information_security_audit;
+concept_mobile_application;
+concept_cross_site_scripting;
+subject_domain_of_application_security;
+
+<- non_atomic_section;;

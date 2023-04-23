@@ -1,0 +1,47 @@
+concept_application_security <- sc_node_class;
+
+=> nrel_main_idtf: [безопасность приложения]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [application security]
+		(*
+		  <- lang_en;;
+		*);
+
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасность приложения]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Безопасность приложения - совокупность мер, направленных на защиту приложений от угроз и атак..]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасность приложения]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Обеспечение безопасности приложений является критически важным для защиты конфиденциальных данных и предотвращения утечек информации, а также для обеспечения надежной работы приложений и защиты от злоумышленных атак.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

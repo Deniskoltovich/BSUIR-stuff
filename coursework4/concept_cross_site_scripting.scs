@@ -1,0 +1,55 @@
+concept_cross_site_scripting
+<- sc_node_class;
+
+=> nrel_main_idtf: [межсайтовый скриптинг]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [cross_site_scripting]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [xss]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_threat;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. межсайтовый скриптинг]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Межсайтовый скриптинг - тип атаки на веб-системы, заключающийся во внедрении в выдаваемую веб-системой страницу вредоносного кода (который будет выполнен на компьютере пользователя при открытии им этой страницы) и взаимодействии этого кода с веб-сервером злоумышленника.
+]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. межсайтовый скриптинг]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Межсайтовый скриптинг использует известные уязвимости в web-приложениях, серверах (или в системных плагинах, относящихся к ним).
+]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

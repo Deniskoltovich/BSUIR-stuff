@@ -1,0 +1,110 @@
+
+concept_computer_science <- sc_node_class;;
+concept_software <- sc_node_class;
+
+=> nrel_main_idtf: [программное обеспечение]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [software]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [ПО]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_computer_science;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. программное обеспечение]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Программное обеспечение - программа или множество программ, используемых для управления компьютером.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. программное обеспечение]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Программное обеспечение является одним из видов обеспечения вычислительной системы, наряду с техническим (аппаратным), математическим, информационным, лингвистическим, организационным, методическим и правовым обеспечением.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
+
+
+
+concept_application <- sc_node_class;
+
+
+=> nrel_main_idtf: [приложение]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [application]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [прикладная программа]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_software;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. приложение]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Приложение — программа, предназначенная для выполнения определённых задач и рассчитанная на непосредственное взаимодействие с пользователем.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. приложение]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Программы с общедоступными исходными текстами называются открытыми.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

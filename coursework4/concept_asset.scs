@@ -1,0 +1,54 @@
+nrel_asset <- sc_node_norole_relation;
+
+=> nrel_main_idtf: [актив]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [аsset]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [ценный ресурс]
+		(*
+		  <- lang_ru;;
+		*);
+ 
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. актив]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Актив - любые данные, устройства или другие компоненты окружения, содержащие ценные информационные ресурсы.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. актив]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Активы должны быть защищены от незаконного доступа, использования, раскрытия, изменения, уничтожения и/или кражи, что может привести к убыткам для организации.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
+
+
+nrel_asset
+<- rrel_key_sc_element: ...;;	

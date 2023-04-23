@@ -1,0 +1,53 @@
+concept_ddos_attack
+<- sc_node_class;
+
+=> nrel_main_idtf: [DDoS-атака]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [DDoS-attack]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [Distributed Denial of Service]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_threat;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. DDoS-атака]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [DDoS-атака - это тип кибератаки, при которой злоумышленники пытаются насытить систему запросами таким образом, чтобы сервер не мог обрабатывать легитимные запросы пользователей, что приводит к отказу в обслуживании.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. DDoS-атака]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [DDoS-атаки являются одними из наиболее распространенных и разрушительных кибератак, которые могут нанести серьезный ущерб компаниям и организациям, а также привести к нарушению работы сайтов и сервисов в Интернете.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

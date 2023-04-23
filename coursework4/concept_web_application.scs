@@ -1,0 +1,35 @@
+concept_web_application
+<- sc_node_class;
+
+=> nrel_main_idtf: [веб-приложение]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [web_application]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [сайт]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. Веб-приложение]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Веб-приложение — клиент-серверное приложение, в котором клиент взаимодействует с веб-сервером при помощи браузера.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);;

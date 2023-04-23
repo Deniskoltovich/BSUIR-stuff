@@ -1,0 +1,55 @@
+concept_sql_injection_protection
+<- sc_node_class;
+
+=> nrel_main_idtf: [защита от внедрения SQL-кода]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [SQL-injection protection]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [защита от SQL-инъекций]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. защита от внедрения SQL-кода]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [защита от внедрения SQL-кода - это мера защиты от атак, которые могут быть использованы для изменения или сбора данных из базы данных.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. защита от внедрения SQL-кода]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [защита от внедрения SQL-кода является важной мерой безопасности приложений, которые используют базы данных.
+
+]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

@@ -1,0 +1,54 @@
+
+concept_application_security <- sc_node_class;;
+concept_threat <- sc_node_class;
+
+=> nrel_main_idtf: [угроза]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [threat]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [угроза]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. Угроза]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Угроза - совокупность условий и факторов, создающих опасность нарушения информационной безопасности.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. Угроза]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Угрозы могут заключаться как в нарушении конфиденциальности, так и в нарушении достоверности, целостности и доступности информации.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

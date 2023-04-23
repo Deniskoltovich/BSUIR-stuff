@@ -1,0 +1,49 @@
+concept_attack_protection
+<- sc_node_class;
+
+=> nrel_main_idtf: [защита от атак]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [attack protection]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. защита от атак]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Защита от атак - это процесс обеспечения защиты приложения от известных видов атак, таких как SQL-инъекции, кросс-сайт-скриптинг и другие. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. защита от атак]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Эффективная защита от атак является важным аспектом безопасности приложений.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

@@ -1,0 +1,50 @@
+concept_storage_security
+<- sc_node_class;
+
+=> nrel_main_idtf: [безопасность хранилища]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [storage security]
+		(*
+		  <- lang_en;;
+		*);
+
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасность хранилища]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Безопасность хранилища - это понятие, описывающее меры, предпринимаемые для защиты данных при их хранении. Это может включать в себя использование криптографических методов для защиты данных и механизмов управления доступом для ограничения доступа к данным. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасность хранилища]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Защита хранилища данных является необходимой мерой для обеспечения безопасности приложения.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

@@ -1,0 +1,53 @@
+concept_mobile_application <- sc_node_class;
+
+
+=> nrel_main_idtf: [мобильное приложение]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [mobile application]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [мобильное приложение]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. мобильное приложение]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Мобильное приложение — разновидность прикладного программного обеспечения, предназначенная для работы на смартфонах, планшетах и других мобильных (портативных, переносных, карманных) устройствах.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. мобильное приложение]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [мобильное приложение напоминает сплит-систему, в которой одна часть находится на стороне пользователя – это Front-end, а другая на стороне разработчика – это Back-end.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

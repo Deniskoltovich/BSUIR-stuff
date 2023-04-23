@@ -1,0 +1,108 @@
+concept_blackbox_method <- sc_node_class;
+
+=> nrel_main_idtf: [метод черного ящика]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [blackbox method]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [черный ящик]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application_security_testing;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. метод черного ящика]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Метод черного ящика - метод тестирования без доступа к внутренней структуре компоненетов системы.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. метод черного ящика]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Метод черного ящика позволяет выявить недостатки системы, которые не позволяет выявить метод белого ящика. Например, нереализованный функционал и т.д.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
+
+concept_whitebox_method <- sc_node_class;
+
+
+=> nrel_main_idtf: [метод белого ящика]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [whitebox method]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [белый ящик]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application_security_testing;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. метод белого ящика]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Метод белого ящика - метод тестирования безопасности приложения, которое учитывает внутренние механизмы системы или компонента.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. метод белого ящика]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Ипользования метода белого ящика требует глубокое понимание технологии и языков программирования, так как поиск уязвимостей происходит непосредственно в программном коде.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
+
+concept_application_security_testing <- sc_node_class;;

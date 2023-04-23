@@ -1,0 +1,54 @@
+concept_secure_code <- sc_node_class;
+
+=> nrel_main_idtf: [безопасный код]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [secure code]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [метод безопасного кода]
+		(*
+		  <- lang_ru;;
+		*);
+
+
+<= nrel_inclusion: concept_application_development;
+
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасный код]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Безопасный код – это метод разработки программного обеспечения, который обеспечивает защиту приложений от взлома и уязвимостей путем устранения ошибок и использования проверенных практик разработки.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасный код]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Для написания безопасного кода необходимо использовать современные методы и средства, такие как статический анализ кода, тестирование на проникновение, автоматическое сканирование уязвимостей и т.д. ]
+         (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

@@ -1,0 +1,53 @@
+concept_security_event_management
+<- sc_node_class;
+
+=> nrel_main_idtf: [управление событиями безопасности ]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [security event management]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [управление безопасностью]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. управление событиями безопасности]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Управление событиями безопасности - это процесс сбора, анализа и реагирования на события безопасности в системе. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. управление событиями безопасности]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Эффективное управление событиями безопасности помогает обнаружить и предотвратить нарушения безопасности в приложении.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
