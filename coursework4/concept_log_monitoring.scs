@@ -1,0 +1,52 @@
+concept_log_monitoring<- sc_node_class;
+
+=> nrel_main_idtf: [Отслеживание журналов]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [log monitoring]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [log monitoring and analys]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. Отслеживание журналов]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Отслеживание журналов -процесс сбора, хранения и анализа журналов событий для выявления подозрительной активности и инцидентов безопасности.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. Отслеживание журналов]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [ Отслеживание и анализ журналов является важным аспектом безопасности приложений, так как позволяет выявлять и реагировать на подозрительную активность и инциденты безопасности.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

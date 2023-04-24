@@ -1,0 +1,49 @@
+concept_continuous_security_integration
+<- sc_node_class;
+
+=> nrel_main_idtf: [непрерывная интеграция безопасности ]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [continuous security integration]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_secure_sdlc;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. непрерывная интеграция безопасности]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [непрерывная интеграция безопасности - процесс интеграции тестирования безопасности в цикл разработки приложения для обеспечения более быстрой и эффективной защиты от уязвимостей.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. непрерывная интеграция безопасности]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Непрерывная интеграция безопасности помогает снизить риски безопасности приложений и ускорить процесс доставки программного обеспечения.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

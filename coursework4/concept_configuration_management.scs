@@ -1,0 +1,53 @@
+concept_configuration_management
+<- sc_node_class;
+
+=> nrel_main_idtf: [конфигурационный менеджмент ]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [configuration management]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [управление конфигурациями]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_secure_sdlc;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. конфигурационный менеджмент]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Конфигурационный менеджмент - это процесс управления и контроля конфигурацией компонентов программного обеспечения, включая их изменения и версионность. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. конфигурационный менеджмент]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Конфигурационный менеджмент необходим для обеспечения целостности приложений и предотвращения возможных нарушений безопасности, которые могут произойти в результате изменений в конфигурации приложений.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

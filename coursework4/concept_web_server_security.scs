@@ -1,0 +1,53 @@
+concept_web_server_security <- sc_node_class;
+
+=> nrel_main_idtf: [безопасность веб-сервера]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [web-server security]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [серверная безопасность]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасность веб-сервера]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [безопасность веб-сервера - набор мер, направленных на защиту веб-сервера от уязвимостей, атак и других угроз.
+]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасность веб-сервера]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Безопасность веб-сервера является важным аспектом безопасности приложений, так как многие приложения в настоящее время используются через веб-серверы, которые могут быть подвержены угрозам безопасности.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

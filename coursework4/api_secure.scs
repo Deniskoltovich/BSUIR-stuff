@@ -1,0 +1,53 @@
+api_secure
+<- sc_node_class;
+
+=> nrel_main_idtf: [безопасность интерфейса приложения]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [api secure]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [Application programming interface secure]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасность интерфейса приложения]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Безопасность API - обеспечение безопасности интерфейсов приложений (API) путем проверки доступа, аутентификации и авторизации, защиты данных и других методов.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасность интерфейса приложения ]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Обеспечение безопасности API - важный аспект разработки приложений, поскольку некорректная работа API может привести к утечке конфиденциальной информации, компрометации пользовательских аккаунтов и другим негативным последствиям.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

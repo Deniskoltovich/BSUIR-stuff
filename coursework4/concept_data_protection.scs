@@ -1,0 +1,50 @@
+concept_data_protection
+<- sc_node_class;
+
+=> nrel_main_idtf: [защита данных]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [data protection]
+		(*
+		  <- lang_en;;
+		*);
+
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. защита данных]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Защита данных - это процесс обеспечения конфиденциальности, целостности и доступности данных, используемых приложением.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. защита данных]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Защита данных является необходимой мерой безопасности приложений, поскольку данные являются одним из наиболее ценных активов организации.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

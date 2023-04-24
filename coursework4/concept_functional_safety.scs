@@ -1,0 +1,49 @@
+concept_functional_safety
+<- sc_node_class;
+
+=> nrel_main_idtf: [функциональная безопасность]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [functional safety]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. функциональная безопасность]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [функциональная безопасность - способность приложения выполнять свои функции без каких-либо сбоев или неправильных действий, которые могут привести к угрозам безопасности.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. функциональная безопасность]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Функциональная безопасность необходима для обеспечения безопасного и надежного функционирования приложения в любых условиях.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

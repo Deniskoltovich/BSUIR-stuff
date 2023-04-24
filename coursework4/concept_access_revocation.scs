@@ -1,0 +1,48 @@
+concept_access_revocation<- sc_node_class;
+
+=> nrel_main_idtf: [отзыв доступа]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [access revocation]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. отзыв доступа]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [отзыв доступа - это процесс удаления или ограничения доступа к системе, данным или ресурсам.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. отзыв доступа]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [отзыв доступа является важным механизмом безопасности для предотвращения несанкционированного доступа и защиты конфиденциальности данных.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

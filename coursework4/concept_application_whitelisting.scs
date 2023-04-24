@@ -1,0 +1,53 @@
+concept_application_whitelisting
+<- sc_node_class;
+
+=> nrel_main_idtf: [белый список приложений]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [application whitelisting]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [белый список]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. белый список приложений]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [белый список приложений - технология, которая ограничивает доступ к системе только тем приложениям, которые были заранее разрешены администратором..]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. белый список приложений]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Белый список приложений является важным аспектом безопасности приложений, так как позволяет ограничить доступ к системе только тем приложениям, которые были проверены и разрешены администратором.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

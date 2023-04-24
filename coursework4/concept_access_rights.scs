@@ -1,0 +1,53 @@
+concept_access_rights
+<- sc_node_class;
+
+=> nrel_main_idtf: [права доступа]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [attack protection]
+		(*
+		  <- lang_en;;
+		*);
+    => nrel_idtf: [ограничения прав доступа]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. права доступа]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [права доступа - это уровень доступа пользователя к системе, данным или ресурсам. Он определяет, какие действия пользователь может выполнять в системе и какие ресурсы он может использовать. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. права доступа]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Права доступа должны быть настроены таким образом, чтобы пользователи имели только те права, которые необходимы для выполнения своих задач.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

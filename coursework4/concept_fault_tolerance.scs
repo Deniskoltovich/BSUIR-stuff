@@ -1,0 +1,48 @@
+concept_fault_tolerance<- sc_node_class;
+
+=> nrel_main_idtf: [отказоустойчивость]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [fault tolerance]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. отказоустойчивость]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Отказоустойчивость - это способность системы продолжать работу при возникновении ошибок, сбоев или атак.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. отказоустойчивость]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Отказоустойчивость является важным аспектом безопасности приложений и может быть достигнута с помощью различных механизмов, таких как резервное копирование и репликация данных.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

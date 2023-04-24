@@ -1,0 +1,52 @@
+concept_cryptography_algorithms<- sc_node_class;
+
+=> nrel_main_idtf: [криптографические алгоритмы]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [cryptography algorithms]
+		(*
+		  <- lang_en;;
+		*);
+    => nrel_idtf: [алгоритмы криптографии]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_cryptography;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. криптографические алгоритмы]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [криптографические алгоритмы - это методы защиты данных с использованием математических алгоритмов, которые обеспечивают конфиденциальность и целостность данных.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. криптографические алгоритмы]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [криптографические алгоритмы используются для шифрования данных, создания цифровых подписей и аутентификации.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

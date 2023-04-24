@@ -1,0 +1,53 @@
+concept_intrusion_detection
+<- sc_node_class;
+
+=> nrel_main_idtf: [средства обнаружения атак]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [intrusion detection]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [средства обнаружения уязвимостей]
+		(*
+		  <- lang_ru;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. средства обнаружения атак]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [средства обнаружения атак - это технологии и методы, используемые для обнаружения несанкционированного доступа к системе или приложению.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. средства обнаружения атак]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Средства обнаружения атак могут быть настроены для обнаружения определенных видов атак, таких как внедрение кода или отказ в обслуживании.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

@@ -1,0 +1,49 @@
+concept_cloud_application_security
+<- sc_node_class;
+
+=> nrel_main_idtf: [безопасность облачных приложений]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [cloud application security]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_application_security;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. безопасность облачных приложений]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Безопасность облачных приложений - обеспечение безопасности приложений, работающих в облачных средах, включая защиту от атак и контроль доступа к данным.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. безопасность облачных приложений]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Безопасность облачных приложений является критически важным аспектом, который требует постоянного мониторинга и обновления, чтобы защитить данные и приложения от угроз безопасности.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

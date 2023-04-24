@@ -1,0 +1,53 @@
+concept_security_monitoring_tools
+<- sc_node_class;
+
+=> nrel_main_idtf: [средства мониторинга безопасности]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [security monitoring tools]
+		(*
+		  <- lang_en;;
+		*);
+=> nrel_idtf: [мониторинг безопасности]
+		(*
+		  <- lang_en;;
+		*);
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. средства мониторинга безопасности]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Средства мониторинга безопасности - это инструменты, которые помогают обнаружить и предотвратить атаки на приложение.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. средства мониторинга безопасности]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Использование средств мониторинга безопасности является важным элементом политики безопасности приложения. Они могут обнаружить угрозы, прежде чем они станут серьезными проблемами, и предотвратить кражу данных и другие атаки.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

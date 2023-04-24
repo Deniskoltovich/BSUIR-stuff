@@ -1,0 +1,50 @@
+concept_incident_detection_mechanisms
+<- sc_node_class;
+
+=> nrel_main_idtf: [механизмы обнаружения инцидентов]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [incident detection mechanisms]
+		(*
+		  <- lang_en;;
+		*);
+
+
+<= nrel_inclusion: concept_attack_protection;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. механизмы обнаружения инцидентов]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [Механизмы обнаружения инцидентов - это методы и технологии, которые позволяют обнаружить нарушения безопасности, такие как взломы, вирусы или другие виды вредоносного ПО. ]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. механизмы обнаружения инцидентов]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Механизмы обнаружения инцидентов необходимы для того, чтобы своевременно обнаруживать нарушения безопасности и принимать меры по их устранению.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;

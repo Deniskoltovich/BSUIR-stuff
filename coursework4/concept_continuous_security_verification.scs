@@ -1,0 +1,49 @@
+concept_continuous_security_verification <- sc_node_class;
+
+=> nrel_main_idtf: [непрерывная проверка безопасности]
+		(*
+		  <- lang_ru;;
+		*);
+		=> nrel_main_idtf: [continuous security verification]
+		(*
+		  <- lang_en;;
+		*);
+
+
+<= nrel_inclusion: concept_application_security_testing;
+
+<- rrel_key_sc_element:
+	...
+	(*
+		<- explanation;;
+		=> nrel_main_idtf: [опр. непрерывная проверка безопасности]
+	  			(*
+	    				<- lang_ru;;
+	  			*);;
+		<= nrel_sc_text_translation:
+		...
+		(*
+		-> rrel_example: [непрерывная проверка безопасности -это процесс постоянной проверки безопасности приложения, который позволяет быстро обнаруживать и устранять уязвимости и атаки. Он включает в себя автоматизированные средства тестирования безопасности, мониторинг и анализ логов.]
+				(*
+				<- lang_ru;;
+				*);;
+		*);;
+	*);
+
+<- rrel_key_sc_element:
+  ...
+  (*
+    <- sc_statement;;
+    => nrel_main_idtf: [утв. непрерывная проверка безопасности]
+          (*
+              <- lang_ru;;
+          *);;
+    <= nrel_sc_text_translation:
+    ...
+    (*
+    -> rrel_example: [Непрерывная проверка безопасности является важным компонентом безопасности приложений, позволяющим обеспечить быстрое обнаружение и устранение уязвимостей.]
+        (*
+        <- lang_ru;;
+        *);;
+    *);;
+  *);;
