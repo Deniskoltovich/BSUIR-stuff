@@ -8,10 +8,9 @@ class Operations:
     trueConjunction = "/\\"
     trueDisjunction = "\\/"
     
-    
-carrySDNF = "(!x1*!x2*x3) + (!x1*x2*!x3) + (!x1*x2*x3) + (x1*x2*x3)"
-resultSDNF = "(!x1*!x2*x3) + (!x1*x2*!x3) + (x1*!x2*!x3) + (x1*x2*x3)"
 
+cSDNF = ''
+rSDNF = ''
 
 def fill_operand_list(expression: str) -> List[str]:
     return expression.split("+")
@@ -32,6 +31,23 @@ def draw_subtractor_truth_table(operand_list: List[str]):
     for perm in perms:
         x1, x2, x3 = perm
         print(f'| {x1} | {x2} | {x3} | {find_b(x1, x2, x3)} | {find_d(x1, x2, x3)} |')
+        global cSDNF, rSDNF
+        if find_b(x1, x2, x3) == 1:
+            cSDNF += ''.join([f'!x{i+1}*' if x == 0 else f'x{i + 1}*' for i, x in enumerate([x1, x2, x3])])
+            cSDNF = cSDNF.removesuffix('*')
+            cSDNF += ' + '
+            
+        if find_d(x1, x2, x3) == 1:
+            rSDNF += ''.join([f'!x{i+1}*' if x == 0 else f'x{i + 1}*' for i, x in enumerate([x1, x2, x3])])
+            rSDNF = rSDNF.removesuffix("*")
+            rSDNF += ' + '
+        
+    cSDNF = cSDNF.removesuffix(' + ')
+    rSDNF = rSDNF.removesuffix(" + ")
+    
+
+
+    
 
         
 
@@ -66,15 +82,14 @@ def draw_8421_plus_6_truth_table(operand_list):
 def ODV(operandList):
     print(f"Таблица истинности для двоичного вычитателя:")
     draw_subtractor_truth_table(operandList)
-    global carrySDNF, resultSDNF
-    print(f"Функция остатка b (carry) в СДНФ: {carrySDNF}")
-    print(f"Функция результата d (result) в СДНФ: {resultSDNF}")
-    min = Minimizer(carrySDNF)
+    print(f"Функция остатка b (carry) в СДНФ: {cSDNF}")
+    print(f"Функция результата d (result) в СДНФ: {rSDNF}")
+    min = Minimizer(cSDNF)
     min.minimize_func_quine_method()
     minbSDNF = min.minimized_func
     print(f"Минимизированная функция b (carry): {minbSDNF}")
 
-    min = Minimizer(resultSDNF)
+    min = Minimizer(rSDNF)
     min.minimize_func_quine_method()
     mindSDNF = min.minimized_func
     print(f"Минимизированная функция d (result): {mindSDNF}")

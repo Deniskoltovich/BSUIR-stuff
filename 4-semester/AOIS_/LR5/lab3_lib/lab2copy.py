@@ -28,10 +28,10 @@ class Context:
 
     def __init__(self, logic_sentence: str):
         self.operation_priority = PriorityOfOperations()
-        self.logical_sentence: str = logic_sentence.replace('=>', '→').replace('<=>', '↔')
+        self.logical_sentence: str = logic_sentence.replace('<=>', '↔').replace('=>', '→')
         self.tokens = []
         self.tokens = self.get_tokens()
-        self.vars = sorted(self.get_set_of_vars())
+        self.vars = set(sorted(self.get_set_of_vars()))
         self.logical_expression = LogicalExpression(tokens=self.tokens)
         self.truth_table = []
         self.evaluate()
@@ -79,12 +79,12 @@ class Context:
                     end_of_var_index += 1
                 token_str = self.logical_sentence[ind:end_of_var_index]
                 token_type = Tokens.VARIABLE
-                token = Token(token_type, token_str, token_type.value)
+                token = Token(token_type, token_str, self.operation_priority[new_token_type])
                 self.tokens.append(token)
                 token_found = True
             elif self.AVAILABLE_TOKENS.get(char, False):
                 new_token_type = self.AVAILABLE_TOKENS[char]
-                token = Token(new_token_type, char, new_token_type.value)
+                token = Token(new_token_type, char, self.operation_priority[new_token_type])
                 self.tokens.append(token)
 
         return self.tokens
@@ -97,7 +97,7 @@ class Context:
     def evaluate(self):
         permutations = sorted(list(product([0, 1], repeat=len(self.vars))))
         for perm in permutations:
-            interpret = {self.vars[i]: perm[i] for i in range(len(self.vars))}
+            interpret = dict(zip(self.vars, perm))
             self.logical_expression.evaluate(interpret, self.truth_table)
 
     def print_table(self):
@@ -113,9 +113,11 @@ class Context:
 class LogicalExpression:
     def __init__(self, tokens):
         self.token_list = tokens
-        self.var_stack = deque()
-        self.operations_stack = deque()
-
+        self.var_stack = []
+        self.operations_stack = []
+        
+    
+        
     def evaluate(self, interpretation_row, truth_table):
         self.interpretation = {**interpretation_row}
         for token in self.token_list:
@@ -123,7 +125,7 @@ class LogicalExpression:
         while self.operations_stack:
             self.process_operation()
         truth_table.append(TruthTableRow(interpretation_row, self.var_stack.pop()))
-
+    
     def process_token(self, token):
         match token.type:
             case Tokens.VARIABLE:
@@ -136,13 +138,13 @@ class LogicalExpression:
                 self._process_right_bracket()
                 return
         self._process_operator(token)
-
+    
     def _process_variable(self, token):
         self.var_stack.append(self.interpretation[token.value])
-
+    
     def _process_left_bracket(self, token):
         self.operations_stack.append(token)
-
+    
     def _process_operator(self, token):
         if not self.operations_stack or \
                 self.operations_stack[-1].type == Tokens.LEFT_BRACKET:
@@ -187,11 +189,11 @@ class Token:
 class PriorityOfOperations:
     def __init__(self):
         self.operations = {
-            Tokens.LEFT_BRACKET: 0,
-            Tokens.VARIABLE: 0,
-            Tokens.RIGHT_BRACKET: 0,
-            Tokens.INVERSION: 1,
-            Tokens.CONJUNCTION: 2,
+            Tokens.LEFT_BRACKET: -1,
+            Tokens.VARIABLE: -1,
+            Tokens.RIGHT_BRACKET: -1,
+            Tokens.INVERSION: 0,
+            Tokens.CONJUNCTION: 1,
             Tokens.DISJUNCTION: 2,
             Tokens.IMPLICATION: 3,
             Tokens.EQUIVALENCE: 4,
@@ -206,15 +208,16 @@ class TruthTableRow:
         self.interpretation = interpretation
         self.value = value
 
+if __name__=='__main__':
 
-logical_expression: str = '!((x1+!x2)*!(x1*!x3))'
-# formula: str = 'x1*x2+x3'
-# formula: str = '(x1+x2)*x3*(x2+x4)'
-# formula: str = 'x1 => x2'
-context = Context(logical_expression)
-context.print_table()
-print(f"PCNF: {context.get_pcnf()}\n")
-print(f'PCNF number form: {context.get_pcnf_number_form()}\n')
-print(f"PDNF: {context.get_pdnf()}\n", )
-print(f'PDNF number form: {context.get_pdnf_number_form()}\n')
-print(f'Index form = {context.get_index_form()}\n')
+    logical_expression: str = '(!((!x1+!x2)&!(x1&x3)))'
+    # formula: str = 'x1*x2+x3'
+    # formula: str = '(x1+x2)*x3*(x2+x4)'
+    # formula: str = 'x1 => x2'
+    context = Context(logical_expression)
+    context.print_table()
+    print(f"PCNF: {context.get_pcnf()}\n")
+    print(f'PCNF number form: {context.get_pcnf_number_form()}\n')
+    print(f"PDNF: {context.get_pdnf()}\n", )
+    print(f'PDNF number form: {context.get_pdnf_number_form()}\n')
+    print(f'Index form = {context.get_index_form()}\n')
