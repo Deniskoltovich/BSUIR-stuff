@@ -1,77 +1,70 @@
-class HashTableNode:
-    def __init__(self, key, value, next = None):
-        self.key = key
-        self.value = value
-        self.next = None
-        
-
 class HashTable:
     ALPHABET = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+    class HashTableNode:
+        def __init__(self, key, value, next=None):
+            self.key = key
+            self.value = value
+            self.next = next
     
-    def __init__(self, size: int) -> None:
-        self.list = [0] * size
-        self.size = size
-        
+    
+    def __init__(self, tab_size: int) -> None:
+        self.list = [0] * tab_size
+        self.tab_size = tab_size 
 
         
     def hash_func(self, key: str):
-        return (self.ALPHABET.index(key[0].upper()) * 33 + self.ALPHABET.index(key[1].upper())) % self.size
+        return (self.ALPHABET.index(key[0].upper()) * 33 + self.ALPHABET.index(key[1].upper())) % self.tab_size
     
     
     def insert(self, key, value):
         hash_key = self.hash_func(key)
         if not self.list[hash_key]:
-            self.list[hash_key] = HashTableNode(key, value)
+            self.list[hash_key] = self.HashTableNode(key, value)
         else:
-            node = self.list[hash_key]
-            while node:
-                if node.key == key:
-                    node.value = value
+            cur_node = self.list[hash_key]
+            while cur_node:
+                if cur_node.key == key:
+                    cur_node.value = value
                     return None
-                node = node.next
-            new_node = HashTableNode(key, value)
-            new_node.next = self.list[hash_key]
+                cur_node = cur_node.next
+            new_node, new_node.next  = self.HashTableNode(key, value), self.list[hash_key]
             self.list[hash_key] = new_node
+
 
     def search(self, key):
         hash_key = self.hash_func(key)
-        node = self.list[hash_key]
-        while node:
-            if node.key == key:
-                return node.value
-            node = node.next
+        cur_node = self.list[hash_key]
+        while cur_node:
+            if cur_node.key == key:
+                return cur_node.value
+            cur_node = cur_node.next
         raise KeyError(key)
+
 
     def remove(self, key):
         hash_key = self.hash_func(key)
-        node = self.list[hash_key]
-        if not node:
+        cur_node = self.list[hash_key]
+        if not cur_node:
             raise KeyError(key)
-        
-        index = 0
-        prev = 0
-        while node:
-            if node.key == key:
+    
+        index, prev = 0, 0
+        while cur_node:
+            if cur_node.key == key:
                 if index == 0:
-                    self.list[hash_key] = node.next
-                    
-                elif index == self.size - 1:
+                    self.list[hash_key] = cur_node.next
+                elif index + 1 == self.tab_size:
                     prev.next = None
-                    
                 else:
-                     prev.next = node.next
+                     prev.next = cur_node.next
                 return None
-            prev = node
-            node = node.next
+            prev, cur_node = cur_node, cur_node.next
             index += 1
 
         raise KeyError(key)       
 
 
-
     def print(self):
-        table = []
-        for i in range(self.size):
+        for i in range(self.tab_size):
             current = self.list[i]
             elements = []
             while current:
@@ -79,7 +72,6 @@ class HashTable:
                 current = current.next
             print(elements)
                 
-
 
 
 if __name__ == '__main__':
@@ -103,7 +95,6 @@ if __name__ == '__main__':
     print(table.search("Дифференциал"))
     print(table.search("Матрица"))
  
-    table.remove("Функция")
-
+    print(table.search("Функция"))
     table.print()
     
