@@ -15,6 +15,15 @@ class HashTable:
     def hash_func(self, key: str):
         return (self.ALPHABET.index(key[0].upper()) * 33 + self.ALPHABET.index(key[1].upper())) % self.tab_size
     
+    def find(self, key):
+        hash_key = self.hash_func(key)
+        cur_node = self.list[hash_key]
+        while cur_node:
+            if cur_node.key == key:
+                return cur_node.value
+            cur_node = cur_node.next
+        raise KeyError(key)
+    
     
     def insert(self, key, value):
         hash_key = self.hash_func(key)
@@ -31,17 +40,7 @@ class HashTable:
             self.list[hash_key] = new_node
 
 
-    def search(self, key):
-        hash_key = self.hash_func(key)
-        cur_node = self.list[hash_key]
-        while cur_node:
-            if cur_node.key == key:
-                return cur_node.value
-            cur_node = cur_node.next
-        raise KeyError(key)
-
-
-    def remove(self, key):
+    def pop(self, key):
         hash_key = self.hash_func(key)
         cur_node = self.list[hash_key]
         if not cur_node:
@@ -75,8 +74,6 @@ class HashTable:
 
 
 if __name__ == '__main__':
- 
-
     table = HashTable(10)
  
 
@@ -92,9 +89,9 @@ if __name__ == '__main__':
 
 
  
-    print(table.search("Дифференциал"))
-    print(table.search("Матрица"))
+    print(table.find("Дифференциал"))
+    print(table.find("Матрица"))
  
-    print(table.search("Функция"))
+    print(table.find("Функция"))
     table.print()
     
