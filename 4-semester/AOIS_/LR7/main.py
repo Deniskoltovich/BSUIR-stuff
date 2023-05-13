@@ -5,11 +5,8 @@ class AssociativeArray:
         if data:
             self.data = data
         else:
-            self.data = ["".join([str(randint(0, 1)) for _ in range(self.word_size)]) for _ in range(size)]
+            self.data = ["".join([str(randint(0, 1)) for _ in range(word_size)]) for _ in range(size)]
             
-    
-    def sort(self):
-        self.data.sort()
     
     def search(self, search_str):
         max_match = 0
@@ -51,9 +48,11 @@ class AssociativeArray:
         sorted_data = []
         copied_data = [word for word in self.data]
         for i in range(len(copied_data)):
-            item = max(self.data)
+            item = max(copied_data)
             sorted_data.append(item)
-            copied_data.remove(item)
+            copied_data.remove(item) 
+        if reverse:
+            return sorted_data[::-1]
         
         return sorted_data
 
@@ -63,7 +62,20 @@ class AssociativeArray:
             if self.compare(word, max_word) != -1:
                 max_word = word
         
-        return max_word                
+        return max_word              
+    
+
+if __name__ == '__main__':
+    associative_processor = AssociativeArray(3, 10)
+    print(f'Сортировка по возрастанию: {associative_processor.sort(reverse=False)}')
+    print(f'Сортировка по возрастанию: {associative_processor.sort(reverse=True)}')
+
+    print(f'Поиск по соответствию: {associative_processor.search("111")}')  
+    print(f'Поиск по соответствию: {associative_processor.search("101")}')  
+    print(f'Поиск по соответствию: {associative_processor.search("000")}')  
+    print(f'Поиск по соответствию: {associative_processor.search("1x0")}')  
+
+
                 
     
 
