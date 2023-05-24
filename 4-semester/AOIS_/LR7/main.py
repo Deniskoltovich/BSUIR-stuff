@@ -1,6 +1,6 @@
 from random import randint
 
-class AssociativeArray:
+class Processor:
     def __init__(self, word_size, size, data=None):
         if data:
             self.data = data
@@ -44,20 +44,20 @@ class AssociativeArray:
         
         raise KeyError()
     
-    def sort(self, reverse=False):
+    def sort(self, reverse=True):
         sorted_data = []
         copied_data = [word for word in self.data]
         for i in range(len(copied_data)):
             item = max(copied_data)
             sorted_data.append(item)
             copied_data.remove(item) 
-        if reverse:
+        if not reverse:
             return sorted_data[::-1]
         
         return sorted_data
 
     def get_max(self):
-        max_word = self.data[1]
+        max_word = self.data[0]
         for word in self.data:
             if self.compare(word, max_word) != -1:
                 max_word = word
@@ -66,14 +66,15 @@ class AssociativeArray:
     
 
 if __name__ == '__main__':
-    associative_processor = AssociativeArray(3, 10)
-    print(f'Сортировка по возрастанию: {associative_processor.sort(reverse=False)}')
-    print(f'Сортировка по возрастанию: {associative_processor.sort(reverse=True)}')
+    processor = Processor(3, 10)
+    
+    print(f'Сортировка по возрастанию: {processor.sort(reverse=False)}')
+    print(f'Сортировка по убыванию: {processor.sort(reverse=True)}')
 
-    print(f'Поиск по соответствию: {associative_processor.search("111")}')  
-    print(f'Поиск по соответствию: {associative_processor.search("101")}')  
-    print(f'Поиск по соответствию: {associative_processor.search("000")}')  
-    print(f'Поиск по соответствию: {associative_processor.search("1x0")}')  
+    print(f'Поиск по соответствию: {processor.search("111")}')  
+    print(f'Поиск по соответствию: {processor.search("101")}')  
+    print(f'Поиск по соответствию: {processor.search("000")}')  
+    print(f'Поиск по соответствию: {processor.search("1x0")}')  
 
 
                 
