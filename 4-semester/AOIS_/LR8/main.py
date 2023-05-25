@@ -1,207 +1,224 @@
-MEMORY_SIZE = 16
 import random
 
-class AssociativeMemory:
-    def __init__(self):
-        self.__memory_table: list[list[int]] = [[0] * MEMORY_SIZE for _ in range(MEMORY_SIZE)]
-        self.__is_table_diagonalized = False
-        self.__logical_operations = {'unequivalence': self.__unequivalence_operation,
-                                     'equivalence': self.__equivalence_operation,
-                                     'second_prohibition': self.__second_prohibition,
-                                     'second_to_first_implication': self.__second_to_first_implication,
-                                     'f6': self.__unequivalence_operation,
-                                     'f9': self.__equivalence_operation,
-                                     'f4': self.__second_prohibition,
-                                     'f11': self.__second_to_first_implication}
+class Memory:
+    def __init__(self, size):
+        self.memory = [[0] * size for _ in range(size)]
+        self.size = size
 
-    def diagonal_addressing(self):
-        if self.__is_table_diagonalized:
-            return
-        new_memory_table = [[0] * MEMORY_SIZE for _ in range(MEMORY_SIZE)]
-        for i in range(MEMORY_SIZE):
-            new_word = [word[i] for word in self.__memory_table]
-            new_word = self.__word_shift(new_word, i)
-            new_memory_table[i] = new_word
-        self.__memory_table = list(map(list, zip(*new_memory_table)))
-        self.__is_table_diagonalized = True
 
-    def reverse_diagonal_addressing(self):
-        if not self.__is_table_diagonalized:
-            return
-        new_memory_table = [[0] * MEMORY_SIZE for _ in range(MEMORY_SIZE)]
-        self.__transpose_memory_table()
-        for i in range(MEMORY_SIZE):
-            new_memory_table[i] = self.__word_shift(self.__memory_table[i], -i)
-        self.__memory_table = list(map(list, zip(*new_memory_table)))
-        self.__is_table_diagonalized = False
+    def convert_to_diagonal(self):
+        diagonal_memory = []
+        for i in range(self.size):
+            shifted_word = self.shift(self.memory[i], i)
+            diagonal_memory.append(shifted_word)
+        self.memory = list(zip(*diagonal_memory))
+        
+    def shift(self, word: list, index: int):
+        flag = False
+        if index < 0:
+            index = -index
+            flag = True
+        word = list(word)
+        for _ in range(index):
+            if not flag:
+                word.insert(0,word.pop())
+            else:
+                word.append(word.pop(0))
 
-    def read_word(self, word_index: int):
-        if not self.__is_table_diagonalized:
-            self.diagonal_addressing()
-        optimized_table = list(map(list, zip(*self.__memory_table)))
-        return_word = ''.join([str(optimized_table[i][(word_index + i) % MEMORY_SIZE]) for i in range(MEMORY_SIZE)])
-        return return_word
+        return list(word)
 
-    def write_word(self, word_index: int, word: str):
-        if len(word) < MEMORY_SIZE or len(word) > MEMORY_SIZE:
-            raise ValueError('Word length must be equal to MEMORY_SIZE')
-        if not self.__is_table_diagonalized:
-            print(self)
-            self.diagonal_addressing()
-        optimized_word_representation = list(map(int, list(word)))
-        optimized_table = list(map(list, zip(*self.__memory_table)))
-        for i in range(MEMORY_SIZE):
-            optimized_table[i][(word_index + i) % MEMORY_SIZE] = optimized_word_representation[i]
-        self.__memory_table = list(map(list, zip(*optimized_table)))
+    def convert_from_diagonal(self):
+        self.memory = list(zip(*self.memory))
+        memory = []
+        for i in range(self.size):
+            reverse_shifted_word = self.shift(self.memory[i], -i)
+            memory.append(reverse_shifted_word)
+        self.memory = memory
 
-    def read_digit_col(self, digit_col_index: int):
-        if not self.__is_table_diagonalized:
-            self.diagonal_addressing()
-        optimized_table = list(map(list, zip(*self.__memory_table)))
-        return ''.join(list(map(str, self.__word_shift(optimized_table[digit_col_index], -digit_col_index))))
+    def read_column(self, column:int):  
+        column_data = [self.memory[i][(i + column) % self.size] for i in range(self.size)]
+        return column_data
 
-    def write_digit_col(self, digit_col_index: int, digit_col: str):
-        if len(digit_col) < MEMORY_SIZE or len(digit_col) > MEMORY_SIZE:
-            raise ValueError('Digit column length must be equal to MEMORY_SIZE')
-        if not self.__is_table_diagonalized:
-            self.diagonal_addressing()
-        optimized_col_representation = list(map(int, list(digit_col)))
-        optimized_table = list(map(list, zip(*self.__memory_table)))
-        optimized_col_representation = self.__word_shift(optimized_col_representation, digit_col_index)
-        optimized_table[digit_col_index] = optimized_col_representation
-        self.__memory_table = list(map(list, zip(*optimized_table)))
-
-    @staticmethod
-    def __word_shift(word: list[int], shift: int):
-        shift = shift % MEMORY_SIZE
-        return word[-shift:] + word[:-shift]
-
-    def logical_operation(self, first_digit_col_index: int, second_digit_col_index: int, logical_operation: str) -> str:
-        first_digit_col: list[int] = list(map(int, list(self.read_digit_col(first_digit_col_index))))
-        second_digit_col: list[int] = list(map(int, list(self.read_digit_col(second_digit_col_index))))
-        operation_result: list[int] = list()
-        for i in range(MEMORY_SIZE):
-            x1, x2 = first_digit_col[i], second_digit_col[i]    
-            operation_result.append(self.__logical_operations[logical_operation](x1, x2))
-        return ''.join(list(map(str, operation_result)))
-
-    @staticmethod
-    def __unequivalence_operation(x1: int, x2: int) -> int:
-        return int((not x1 and x2) or (x1 and not x2))
-
-    @staticmethod
-    def __equivalence_operation(x1: int, x2: int) -> int:
-        return int((x1 and x2) or (not x1 and not x2))
-
-    @staticmethod
-    def __second_prohibition(x1: int, x2: int) -> int:
-        return int(not x1 and x2)
-
-    @staticmethod
-    def __second_to_first_implication(x1: int, x2: int) -> int:
-        return int(x1 or not x2)    
-
-    def arithmetical_operation(self, mask: str):
-        for i in range(MEMORY_SIZE):
+    def write_column(self, column: int, data: list):
+        self.memory = list(map(list, self.memory))
+        for i in range(self.size):
             word = self.read_word(i)
-            if word[:3] == mask:
-                field_a, field_b = word[3:7], word[7:11]
-                word = word[:11] + self.__full_number_addition(field_a, field_b)
-                self.write_word(i, word)
+            word[column] = data[i]
+            self.write_word(i, word)
+        
+            
+    def read_word(self, index:int):
+        return self.shift(self.memory[index], -index)
+        
+    def write_word(self, index: int, data: list):
+        shifted_word = self.shift(data, index)
+        self.memory = list(map(list, self.memory))
+        for i in range(self.size):
+            self.memory[i][index] = shifted_word[i]
+        
+        
+    @staticmethod
+    def f6(digit1: int, digit2: int):
+        return int((not digit1 and digit2) or (digit1 and not digit2))
 
     @staticmethod
-    def __full_number_addition(first_number: str, second_number: str) -> str:
-        first_number = list(map(int, first_number))
-        second_number = list(map(int, second_number))
-        result, carry = '', 0
-        for fi, si in zip(first_number, second_number):
-            result = str(int(fi ^ si ^ carry)) + result
-            carry = int((fi and si) or (fi ^ si) and carry)
-        result = str(carry) + result
-        return result
+    def f9(digit1: int, digit2: int):
+        return int((digit1 and digit2) or (not digit1 and not digit2))
 
     @staticmethod
-    def __comparison_flags(memory_word: str, search_word: str):
-        prev_g_flag, prev_l_flag = False, False
-        for i in range(MEMORY_SIZE):
-            memory_word_digit = bool(int(memory_word[i]))
-            search_word_digit = bool(int(search_word[i]))
-            next_g_flag = prev_g_flag or (not search_word_digit and memory_word_digit and not prev_l_flag)
-            next_l_flag = prev_l_flag or (search_word_digit and not memory_word_digit and not prev_g_flag)
-            prev_g_flag, prev_l_flag = next_g_flag, next_l_flag
-        return {'g_flag': prev_g_flag,
-                'l_flag': prev_l_flag}
+    def f4(digit1: int, digit2: int):
+        return int(not digit1 and digit2)
 
-    def __compare_words(self, memory_word: str, search_word: str) -> int:
-        comparison_flags = self.__comparison_flags(memory_word, search_word)
-        if not comparison_flags['g_flag'] and not comparison_flags['l_flag']:
-            return 0
-        elif comparison_flags['g_flag'] and not comparison_flags['l_flag']:
-            return 1
-        elif not comparison_flags['g_flag'] and comparison_flags['l_flag']:
-            return -1
-        else:
-            raise ValueError('Flags can\'t be equal to 1 at the same time')
+    @staticmethod
+    def f11(digit1: int, digit2: int):
+        return int(digit1 or not digit2)   
+        
+    def perform_logical_operation(self, operation:str, ind1, ind2):
+        col1, col2 = self.read_column(ind1), self.read_column(ind2)
+        operations = {'f4': self.f4,
+                      'f6': self.f6,
+                      'f9' : self.f9,
+                      'f11' : self.f11
+                      }
+        
+        return ''.join(list(map(lambda x: str(operations[operation](*x)), list(zip(col1, col2)))))
 
-    def search_within_given_range(self, lower_bound: str, upper_bound: str):
-        search_words = [self.read_word(i) for i in range(MEMORY_SIZE) if self.__compare_words(self.read_word(i),
-                                                                                     upper_bound) == -1]
-        search_words = list(filter(lambda word: self.__compare_words(word, lower_bound) == 1, search_words))
-        return search_words
-
-    def closest_pattern_search(self, pattern: str):
-        difference_list = list()
-        for i in range(MEMORY_SIZE):
-            difference_rank = 0
+    def perform_arithmetic_operation(self, V: str):
+        index = 0
+        founded = []
+        V = list(map(int, V))
+        for i in range(self.size):
             word = self.read_word(i)
-            for j in range(MEMORY_SIZE):
-                difference_rank += 1 if word[j] != pattern[j] and pattern[j] != 'x' else 0
-            difference_list.append((word, difference_rank))
-        min_difference_rank = min([i[1] for i in difference_list])
-        difference_list = list(filter(lambda x: x[1] == min_difference_rank, difference_list))
-        return [i[0] for i in difference_list]
+            if word[:3] == V:
+                index = i
+                founded = word
+                
+        a, b = founded[3:7], founded[7:11]
+        new_word = founded[:11] + self.arithmetic_operation(a,b)
+        return " ".join(list(map(str, new_word))), index
+        
+    def arithmetic_operation(self, word1, word2):
+        
+        num1 = [int(x) for x in word1]
+        num2 = [int(x) for x in word2]
+        ans = ''
+        carry = 0
+        while len(num1) and len(num2):
+            dig1 = num1.pop()
+            dig2 = num2.pop()
+            res = int(dig1 ^ dig2 ^ carry)
+            ans = str(res) + ans
+            carry = int((dig1 and dig2) or (dig1 ^ dig2) and carry)
+        ans = str(carry) + ans
+        return list(ans)
+        
+        
+    def find_flags(self, word_1: str, word_2: str):
+        cur_g, cur_l = 0, 0
+        for ind, word in enumerate(self.data):
+            digit_1, digit_2 = list(map(lambda x: bool(int(x)), [word_1[ind], word_2[ind]] ))
+            next_g = cur_g or (not digit_2 and digit_1 and not cur_l)
+            next_l = cur_l or (digit_2 and not digit_1 and not cur_g)
+            cur_g, cur_l = next_g, next_l
+        return bool(cur_g), bool(cur_l)
+    
+    def compare(self, word_1: str, word_2: str):
+        match self.find_flags(word_1, word_2):
+            case (True, False): return 1
+            case (False, True): return -1
+            case (False, False): return 0
+        
+        raise KeyError()
+    
+    def sort(self, reverse=True):
+        sorted_data = []
+        copied_data = [''.join(list(map(str,self.read_word(i)))) for i in range(self.size)]
+        for _ in range(len(copied_data)):
+            item = max(copied_data)
+            sorted_data.append(item)
+            copied_data.remove(item) 
+        if not reverse:
+            return sorted_data[::-1]
+        
+        memory = list(map(list, sorted_data))
+        self.memory = memory
+        self.convert_to_diagonal()
 
-    def ordered_sampling(self, **kwargs):
-        primary_results: list[str] = list()
-        if kwargs['search_mode'] == 'range':
-            primary_results = self.search_within_given_range(kwargs['lower_bound'], kwargs['upper_bound'])
-        elif kwargs['search_mode'] == 'pattern':
-            primary_results = self.closest_pattern_search(kwargs['pattern'])
-        if kwargs['filter_mode'] == 'sort':
-            return sorted(primary_results, reverse=kwargs.get('reverse', False))
-        elif kwargs['filter_mode'] in ('min', 'max'):
-            return self.__find_extremum_in_word_sequence(primary_results, kwargs['filter_mode'])
+    def get_max(self):
+        max_word = ''.join(self.data[0])
+        for word in self.data:
+            if self.compare(''.join(word), max_word) != -1:
+                max_word = word
+        
+        return max_word              
+        
 
-    def __find_extremum_in_word_sequence(self, sequence: list[str], mode: str = 'min'):
-        extremum_word = '0' * MEMORY_SIZE if len(sequence) <= 0 else sequence[0]
-        result_sequence: list[str] = list()
-        for word in sequence:
-            if self.__compare_words(word, extremum_word) == {'min': -1, 'max': 1}[mode]:
-                extremum_word = word
-                result_sequence.clear()
-            if self.__compare_words(word, extremum_word) == 0:
-                result_sequence.append(word)
-        return result_sequence
+    def print_memory(self):
+        for row in self.memory:
+            print(' '.join(map(str, row)))
 
-    def __transpose_memory_table(self):
-        self.__memory_table = list(map(list, zip(*self.__memory_table)))
 
-    def __str__(self):
-        return_str = f'Is memory table diagonalized: {self.__is_table_diagonalized}\n' \
-                     f'{"Memory Table".center(31, " ")}'
-        for word in self.__memory_table:
-            return_str += '\n' + ' '.join(list(map(str, word)))
-        return return_str
+
+if __name__== '__main__':
+        
+    memory = Memory(16)
+
+    for i in range(16):
+        column = [random.randint(0,1) for _ in range(16)]
+        memory.write_column(i, column)
+
+    print("Original Memory:")
+    memory.print_memory()
+
+    memory.convert_to_diagonal()
+    print("\nMemory with Diagonal Addressing:")
+    memory.print_memory()
+
+    memory.convert_from_diagonal()
+    print("\nMemory with Original Addressing:")
+    memory.print_memory()
+    memory.convert_to_diagonal()
     
     
-am = AssociativeMemory()
-for i in range(16):
-    am.write_word(i, ''.join(list(map(str, [random.randint(0, 1) for _ in range(16)]))))
-print(am)
-for i in range(16):
-    print(f'[{i}]{" " * (len(str(i)) % 2)}: {am.read_word(i)}')
+    word = [random.randint(0,1) for _ in range(16)]
+    index = 2
+    print(f'\nWriting word {word} on index {index}\nMemory:')
+    memory.write_word(index, word)
+    memory.print_memory()
 
 
-am.write_digit_col(1, ''.join(list(map(str, [random.randint(0, 1) for _ in range(16)]))))
-for i in range(16):
-        print(f'[{i}]{" " * (len(str(i)) % 2)}: {am.read_digit_col(i)}')
+    column = [random.randint(0,1) for _ in range(16)]
+    index = 2
+    print(f'\nWriting column {column} on index {index}\nMemory:')
+    memory.write_column(index, column)
+    memory.print_memory()
+    
+    print('\nLogical operations')
+    print('!x1*x2', f'x1= 1st col = {memory.read_column(0)}', f'x2= 2nd col = {memory.read_column(1)}', sep='\n')
+    print(f'ans = {memory.perform_logical_operation("f4", 0, 1)}')
+    print()
+    print('!x1*x2 + x1*!x2', f'x1= 1st col = {memory.read_column(0)}', f'x2= 2nd col = {memory.read_column(1)}', sep='\n')
+    print(f'ans = {memory.perform_logical_operation("f6", 0, 1)}')
+    print()
+    print('x1*x2 + !x1*!x2', f'x1= 1st col = {memory.read_column(0)}', f'x2= 2nd col = {memory.read_column(1)}', sep='\n')
+    print(f'ans = {memory.perform_logical_operation("f9", 0, 1)}')
+    print()
+    print('x1 + !x2', f'x1= 1st col = {memory.read_column(0)}', f'x2= 2nd col = {memory.read_column(1)}', sep='\n')
+    print(f'ans = {memory.perform_logical_operation("f11", 0, 1)}')
+    print('\nArithmetic operations')
+    
+    print('V = 110')
+    ans, index = memory.perform_arithmetic_operation("110")
+    print(f'founded word index = {index}', sep='\n')
+    print(f'ans = {ans}')
+    
+    print('\nSorting words in memory')
+    memory.sort()
+    print('\nSorted with Diagonal Addressing\n')
+    memory.print_memory()
+    memory.convert_from_diagonal()
+    
+    print('\nSorted with Original Addressing\n')
+
+    memory.print_memory()
+    
