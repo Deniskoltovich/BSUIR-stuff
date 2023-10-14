@@ -1,4 +1,5 @@
 import random
+import datetime
 
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -25,6 +26,7 @@ def generate_key(key_word, original_text):
             index = 0
         key += key_word_arr[index]
         index += 1
+
     return key
 
 def encrypt_char(table: dict, origial_char: str, key_char: str):
@@ -81,5 +83,6 @@ if __name__ == "__main__":
     print('Encrypted: ', vig_enc)
     vig_dec = vigenere_decryption(key_word, vig_enc, ALPHABET)
     print('Decrypted: ', vig_dec)
-    
+    start = datetime.datetime.now()
     print(f"Iterations to hack: {hack_password(original_text, vig_enc, ALPHABET, key_word)}")
+    print('Time to hack', datetime.datetime.now() - start)
