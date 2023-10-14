@@ -1,0 +1,3 @@
+argparse
+crypto==1.4.1
+Pillow==10.0.1
