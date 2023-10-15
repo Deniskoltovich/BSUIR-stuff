@@ -44,7 +44,6 @@ class Parser:
             )
         return parsed
 
-
     def parse(self):
         self.delete_spaces()
         self.parse_data()

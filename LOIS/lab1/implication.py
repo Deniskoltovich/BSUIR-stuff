@@ -4,84 +4,91 @@ class Implication:
         self.second_predicate = second_predicate
         self.parcel = parcel
 
-    def calculate_implication(self):
-        result = []
-        for i in range(len(self.first_predicate['corteges'])):
-            row = []
-            elements = []
-            for j in range(len(self.second_predicate['corteges'])):
-                elements = [self.first_predicate['corteges'][i]['name'], self.second_predicate['corteges'][j]['name']]
-                value = self.implicate(self.first_predicate['corteges'][i], self.second_predicate['corteges'][j])
-                row.append([elements, value])
-            result.append(row)
-        return result
+    def solve(self):
+        implication_matrix = self.implication()
 
-    def implicate(self, first_el, second_el):
-        value = 1 if first_el['value'] <= second_el['value'] else second_el['value']
-        return value
+        i = 1
+        used_parcels = []
+        current_parcel = self.parcel
 
-    def get_elements_except_one(self, el, elements):
-        return [element for element in elements if element != el]
+        while True:
+            if current_parcel in used_parcels:
+                break
 
-    def check_parcel_and_result(self, result):
-        conjuncted_matrix = []
-        if len(result) != len(self.parcel['corteges']):
-            return
-        for i in range(len(result)):
-            row = []
-            for j in range(len(result[i])):
-                if self.parcel['corteges'][i]['name'] in result[i][j][0]:
-                    el = [self.get_elements_except_one(self.parcel['corteges'][i]['name'], result[i][j][0]),
-                          min(self.parcel['corteges'][i]['value'], result[i][j][1])]
-                    row.append(el)
-            conjuncted_matrix.append(row)
-        return conjuncted_matrix
+            conjunction_matrix = self.conjunction(current_parcel, implication_matrix)
+            if not conjunction_matrix:
+                break
 
-    def get_conclusion(self, conjucted_matrix):
-        conclusion = []
-        print(conjucted_matrix)
-        for i in range(len(conjucted_matrix[0])):
-            column = []
-            for j in range(len(conjucted_matrix)):
-                column.append(conjucted_matrix[j][i])
-            column.sort(key=lambda x: x[1], reverse=True)
-            conclusion.append(column[0])
+            direct_conclusion = self.make_conclusion(conjunction_matrix, f'{self.parcel["name"]}{i}')
+            self.print_set(direct_conclusion)
+
+            used_parcels.append(current_parcel)
+            current_parcel = direct_conclusion
+            i += 1
+
+    @staticmethod
+    def print_set(set: dict):
+        output = f"{set['name']} = " + '{'
+        for var, val in set['set'].items():
+            output += f'({var}, {val}), '
+        print(output.removesuffix(', ') + '}')
+
+    @staticmethod
+    def make_conclusion(conjunction_matrix: list[list[tuple]], name: str):
+        supremos = [] # список макс значений по столбцам
+        for col_idx in range(len(conjunction_matrix[0])):
+            supremos.append(max(
+                row[col_idx][1] for row in conjunction_matrix
+            ))
+        # переменные по столбцам
+        # item[0] = 'x1,y1'
+        vars = [item[0].split(',')[1] for item in conjunction_matrix[0]]
+
+        conclusion = {
+            'name': name,
+            'set': dict(zip(vars, supremos))
+        }
         return conclusion
 
-    def show_ans(self, ans):
-        string = "{"
-        for i in range(len(ans)):
-            cortege = ""
-            if len(ans[i][0]) > 1:
-                cortege = "(({}),{})".format(','.join(ans[i][0]), ans[i][1])
-            else:
-                cortege = "({}, {})".format(','.join(ans[i][0]), ans[i][1])
-            string += cortege
-            if i != len(ans) - 1:
-                string += ','
-        string += "}"
-        return string
+    @staticmethod
+    def check_parcel_to_conjunct(parcel_vec: dict, implication_matrix: list[list[tuple]]):
+        # parcel_vec = {'name': 'F', 'set': {'x1': 0.2, 'x2': 1.0}}
+        # проверяем размеры
+        if len(parcel_vec['set']) != len(implication_matrix):
+            raise ValueError
+        # проверяем, чтобы переменные в строках совпадали
+        for row in implication_matrix:
+            # row = [('x1,y1', 1.0), ...]
+            # если названия элементов парселя не совп. с "названиями строк" в матрице
+            if not parcel_vec['set'].get(row[0][0].split(',')[0]):
+                raise ValueError
 
-    def calculate(self):
-        implication_matrix = self.implication()
-        conjucted_matrix = self.check_parcel_and_result(self.calculate_implication())
-        ans = self.get_conclusion(conjucted_matrix)
-        print(self.show_ans(ans))
+    @staticmethod
+    def conjunction(parcel_vec: dict, implication_matrix: list[list[tuple]]):
+        try:
+            Implication.check_parcel_to_conjunct(parcel_vec, implication_matrix)
+        except ValueError:
+            return None
+        # для каждого элемента в матрице ипликации и соотв. по строке элемента в парселе ищем минимальное
+        conjunction_matrix = []
+        for row in implication_matrix:
+            # item = ('x1,y1', 1.0)
+            conjunction_matrix.append(
+                [(item[0],
+                  min(item[1], parcel_vec['set'].get(item[0].split(',')[0]))
+                  ) for item in row]
+            )
 
-    def implication(self):
-        # if len(self.first_predicate['set']) != len(self.second_predicate['set']):
-        #     raise RuntimeError(f'The lengths of predicates {self.first_predicate}, {self.second_predicate} are not eq')
-        # задаем размер
-        matrix = [[_ for _ in range(len(self.second_predicate['set']))]
-                  for _ in range(len(self.first_predicate['set'].keys()))
-                  ]
+        return conjunction_matrix
+
+    def implication(self) -> list[list[tuple]]:
+        matrix = []
         # вычисляем значения элементов матрицы
-        for i, item1 in enumerate(self.first_predicate['set'].keys()):
-            for j, item2 in enumerate(self.second_predicate['set'].keys()):
-                matrix[i][j] = (f'{item1},{item2}',
-                                max(self.first_predicate['set'].get(item1),
-                                    self.second_predicate['set'].get(item2)
-                                    )
-                                )
-
+        for item1 in self.first_predicate['set'].keys():
+            matrix.append([
+                (f'{item1},{item2}',
+                    max(self.first_predicate['set'].get(item1),
+                        self.second_predicate['set'].get(item2))
+                 ) for item2 in self.second_predicate['set'].keys()
+            ])
         return matrix
