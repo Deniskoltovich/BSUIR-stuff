@@ -1,3 +1,9 @@
+'''
+Лабораторная работа №1 по дисциплине ЛОИС
+Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д., Кимстачем Д.
+Вариант 1: импликация Гёделя
+'''
+
 class Implication:
     def __init__(self, first_predicate: dict, second_predicate: dict, parcel: dict):
         self.first_predicate = first_predicate
@@ -5,26 +11,34 @@ class Implication:
         self.parcel = parcel
 
     def solve(self):
+        #проводим импликацию
         implication_matrix = self.implication()
 
         i = 1
         used_parcels = []
         current_parcel = self.parcel
+        new_parcels = []
 
         while True:
-            if current_parcel in used_parcels:
-                break
-
+            # проводим конъюнкцию
             conjunction_matrix = self.conjunction(current_parcel, implication_matrix)
             if not conjunction_matrix:
                 break
-
+            # делаем вывод из матрицы конъюнкции
             direct_conclusion = self.make_conclusion(conjunction_matrix, f'{self.parcel["name"]}{i}')
-            self.print_set(direct_conclusion)
+            used_parcels.append(current_parcel['set'])
+            # если такой вывод уже использовался (зацикливание)
+            if direct_conclusion['set'] in used_parcels:
+                break
+            new_parcels.append(direct_conclusion)
 
-            used_parcels.append(current_parcel)
+
+            self.print_set(direct_conclusion)
             current_parcel = direct_conclusion
             i += 1
+
+        if len(new_parcels) == 0: print('Области определения не совпадают')
+        return new_parcels
 
     @staticmethod
     def print_set(set: dict):
