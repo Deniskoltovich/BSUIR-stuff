@@ -11,26 +11,37 @@
 
         <nav class="navbar navbar-expand-lg bg-dark bg-body-tertiary" data-bs-theme="dark">
             <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'list_publications' %}">News</a>
+            <a class="navbar-brand" href="{% url 'list_products' %}">Товары</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'create_product' %}">Создать товар</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'list_categories' %}">Категории</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'list_bills' %}">Накладные</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'create_bill' %}">Создать накладную</a>
+            </li>
 
+          </ul>
 
-                    <li class="nav-item">
-                    <a class="nav-link" href="{%url '' %}">Предложения</a>
-                  </li>
-
-              </div>
+                                 </div>
               <form class="d" role="search"
                     method="GET"
-                    action="{% url 'list_publications' %}">
-                        <input type="text" name="search" placeholder="Часть названия или статьи">
+                    action="{% url 'list_bills' %}">
                         <input type="text" name="date" placeholder="Дата: YYYY-dd-mm">
                     <button class="btn btn-outline-success" type="submit">Поиск</button>
                    </form>
             </div>
+
         </nav>
         <div class="container-fluid">
             {% csrf_token %}

@@ -11,6 +11,11 @@ class Implication:
         self.parcel = parcel
 
     def solve(self):
+        """
+        Создает матрицу импликации согласно правилу и предикатам, производит операцию
+        конъюнкции посылки с матрицей и делает прямой вывод. Результат прямого вывода снова
+         учавствует в конъюнкции с матрицей импликации (если может). Возвращает результаты прямых выводов.
+        """
         #проводим импликацию
         implication_matrix = self.implication()
 
@@ -29,6 +34,9 @@ class Implication:
             used_parcels.append(current_parcel['set'])
             # если такой вывод уже использовался (зацикливание)
             if direct_conclusion['set'] in used_parcels:
+                if len(new_parcels) == 0:
+                    print('Зацикливание')
+                    return new_parcels
                 break
             new_parcels.append(direct_conclusion)
 
@@ -49,6 +57,9 @@ class Implication:
 
     @staticmethod
     def make_conclusion(conjunction_matrix: list[list[tuple]], name: str):
+        """
+        Делает прямой вывод из матрицы конъюнкции
+        """
         supremos = [] # список макс значений по столбцам
         for col_idx in range(len(conjunction_matrix[0])):
             supremos.append(max(
@@ -66,6 +77,10 @@ class Implication:
 
     @staticmethod
     def check_parcel_to_conjunct(parcel_vec: dict, implication_matrix: list[list[tuple]]):
+        """
+        Проверяет подходит ли посылка для конъеюнкции с матрицей импликации. Проверяет размерность
+        и область определения
+        """
         # parcel_vec = {'name': 'F', 'set': {'x1': 0.2, 'x2': 1.0}}
         # проверяем размеры
         if len(parcel_vec['set']) != len(implication_matrix):
@@ -74,7 +89,8 @@ class Implication:
         for row in implication_matrix:
             # row = [('x1,y1', 1.0), ...]
             # если названия элементов парселя не совп. с "названиями строк" в матрице
-            if not parcel_vec['set'].get(row[0][0].split(',')[0]):
+            t = row[0][0].split(',')[0]
+            if parcel_vec['set'].get(row[0][0].split(',')[0]) is None:
                 raise ValueError
 
     @staticmethod

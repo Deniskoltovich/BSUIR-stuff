@@ -14,7 +14,7 @@ from Parser import Parser
 
 def main():
     # Считываем информацию с файла
-    with open('input2.txt', 'r') as f:
+    with open('input.txt', 'r') as f:
         data = f.readlines()
 
     # Парсим информацию, которую считали с файла
@@ -31,7 +31,7 @@ def main():
         print('Предикаты:')
         Implication.print_set(first_predicate)
         Implication.print_set(second_predicate)
-        for parcel in chain(parser.parcels, generated_parcels):
+        for parcel in chain(parser.predicates, generated_parcels):
             print(f'Посылка: ', end='')
             Implication.print_set(parcel)
 

@@ -11,3 +11,5 @@ class Customer(models.Model):
     document_number = models.CharField(max_length=16, blank=False)
     bank_info = models.CharField(max_length=64, blank=False)
 
+    def __str__(self):
+        return f'{self.name}\nДокумент {self.document_series} {self.document_number}\nБанк: {self.bank_info}'

@@ -1,0 +1,10 @@
+python3 client.py 127.0.0.1 8001 --method PUT --body '{
+    "file":"content.txt",
+    "lin1": "here",
+    "line2": "here"
+}'
+
+
+ python3 client.py 127.0.0.1 8001 --path '/?file=content.txt'
+
+python3 client.py 127.0.0.1 8001 --method OPTIONS
