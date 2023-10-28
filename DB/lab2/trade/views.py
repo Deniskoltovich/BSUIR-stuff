@@ -1,10 +1,11 @@
-from datetime import datetime
+import datetime
 
 from django.db import connection
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
+
+from profiles.models import Customer
 from trade.models import Bill
 from trade.forms import BillCreationForm
-from django.db.models import Max
 
 
 
@@ -33,16 +34,16 @@ def list_bills(request):
     return render(request, 'list_bills.html', context=context)
 
 def update_bill(request, id):
-    bill = Bill.objects.raw("SELECT * FROM trade_bills WHERE id=%s", [id])
+    bill = Bill.objects.raw("SELECT * FROM trade_bill WHERE id=%s", [id])[0]
     if request.method == 'POST':
         form = BillCreationForm(request.POST, instance=bill)
         if form.is_valid():
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "UPDATE  trade_bill"
+                    "UPDATE  trade_bill "
                     "SET customer_id = %s, price = %s, quantity = %s, city = %s, region = %s, country = %s "
                     "WHERE id = %s",
-                    [form.cleaned_data['customer'], form.cleaned_data['price'], form.cleaned_data['quantity'],
+                    [Customer.objects.get(pk=form.cleaned_data['customer'].id).id   , form.cleaned_data['price'], form.cleaned_data['quantity'],
                      form.cleaned_data['city'], form.cleaned_data['region'], form.cleaned_data['country'], id]
                 )
             return redirect('list_bills')
@@ -62,7 +63,7 @@ def create_bill(request):
                     "INSERT INTO trade_bill (customer_id, price, quantity, city, region, country, date, full_price) "
                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                     [form.cleaned_data['customer'].id, form.cleaned_data['price'], form.cleaned_data['quantity'],
-                     form.cleaned_data['city'], form.cleaned_data['region'], form.cleaned_data['country']]
+                     form.cleaned_data['city'], form.cleaned_data['region'], form.cleaned_data['country'], datetime.datetime.utcnow(), 0]
                 )
             return redirect('list_bills')
     else:
@@ -75,6 +76,6 @@ def create_bill(request):
 
 def delete_bill(request, id):
     with connection.cursor() as cursor:
-        cursor.execute("DELETE FROM trade_bills WHERE id=%s", [id])
+        cursor.execute("DELETE FROM trade_bill WHERE id=%s", [id])
     return redirect('list_bills')
 

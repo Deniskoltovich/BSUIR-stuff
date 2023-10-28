@@ -7,7 +7,7 @@ class BillCreationForm(ModelForm):
 
     class Meta:
         model = Bill
-        fields = '__all__'
+        exclude = ['full_price',]
 
 
     def __init__(self, *args, **kwargs):

@@ -15,7 +15,7 @@ def list_products(request):
 
 
 def get_products_price_changelog(request, id):
-    product = Product.objects.raw("SELECT * FROM products_product WHERE id=%s", [id])
+    product = Product.objects.raw("SELECT * FROM products_product WHERE id=%s", [id])[0]
     objs = PriceChangeLog.objects.raw("""
             SELECT * 
             FROM products_pricechangelog 
@@ -60,7 +60,7 @@ def create_product(request):
                     "INSERT INTO products_product (company, code, name, category_id, price) "
                     "VALUES (%s, %s, %s, %s, %s)",
                     [form.cleaned_data['company'], form.cleaned_data['code'], form.cleaned_data['name'],
-                     form.cleaned_data['category'], form.cleaned_data['price']]
+                     Category.objects.get(name=form.cleaned_data['category']).id, form.cleaned_data['price']]
                 )
             return redirect('list_products')
     else:
