@@ -2,6 +2,7 @@
 Лабораторная работа №1 по дисциплине ЛОИС
 Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д., Кимстачем Д.
 Вариант 1: импликация Гёделя
+Задача: разработать программу, выполняющую прямой нечеткий логический вывод
 '''
 
 
@@ -13,7 +14,6 @@ class Parser:
     def __init__(self, data):
         self.data = data
         self.predicates = []
-        #self.parcels = []
         self.rules = []
 
     def delete_spaces(self):
@@ -36,8 +36,8 @@ class Parser:
 
 
     def validate(self):
-        reg_exp = r"([A-Z]\d*)=(\{(\([a-z]\d*,\d(\.\d+)?\))(,\([a-z]\d*,\d(\.\d+)?\))*})|\{\}"
-        for item in chain(self.predicates, self.parcels):
+        reg_exp = r"([A-Z]\d*)=(\{(\<[a-z]\d*,\d(\.\d+)?\>)(,\<[a-z]\d*,\d(\.\d+)?\>)*})|\{\}"
+        for item in self.predicates:
             if item != '' and not re.match(reg_exp, item):
                 raise RuntimeError('invalid input format')
 
@@ -45,18 +45,18 @@ class Parser:
     def parse_set(set: list) -> list[dict]:
         """
         приводит нечеткие множества set в список с элементами формата:
-        {'name': 'A', 'set': {'x1': 0.1, 'x2': 0,2}
+        {'name': 'A', 'set': {'x1': 0.1, 'x2': 0,2}}
         """
         parsed = []
         for item in set:
             splited = item.split('=')
-            set_values: list[str] = splited[1].replace('{' ,'').replace('}', '').split('),')
+            set_values: list[str] = splited[1].replace('{' ,'').replace('}', '').split('>,')
             parsed.append(
                 {'name': splited[0],
                  'set':
                      {
-                        item.split(',')[0].replace('(', ''):
-                        float(item.split(',')[1].replace(')', ''))
+                        item.split(',')[0].replace('<', ''):
+                        float(item.split(',')[1].replace('>', ''))
                         for item in set_values
                     }
                  }
@@ -68,5 +68,4 @@ class Parser:
         self.parse_data()
         self.validate()
         self.predicates = self.parse_set(self.predicates)
-        # self.parcels = self.parse_set(self.parcels)
         self.rules = [rule.split('~>') for rule in self.rules]

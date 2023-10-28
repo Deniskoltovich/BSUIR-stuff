@@ -67,7 +67,7 @@ def handle_options():
     response = "HTTP/1.1 200 OK\r\n" + \
                 'Allow: GET, POST, OPTIONS\r\n' + \
                'Access-Control-Allow-Origin: *\r\n' + \
-               'Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n' + \
+               'Access-Control-Allow-Methods: GET, PUT, OPTIONS\r\n' + \
                'Access-Control-Allow-Headers: Content-Type\r\n\r\n'
 
     return response.encode('utf-8')

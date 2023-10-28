@@ -2,8 +2,10 @@
 Лабораторная работа №1 по дисциплине ЛОИС
 Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д., Кимстачем Д.
 Вариант 1: импликация Гёделя
+Задача: разработать программу, выполняющую прямой нечеткий логический вывод
 '''
 
+i = 1
 class Implication:
     def __init__(self, first_predicate: dict, second_predicate: dict, parcel: dict):
         self.first_predicate = first_predicate
@@ -14,21 +16,21 @@ class Implication:
         """
         Создает матрицу импликации согласно правилу и предикатам, производит операцию
         конъюнкции посылки с матрицей и делает прямой вывод. Результат прямого вывода снова
-         учавствует в конъюнкции с матрицей импликации (если может). Возвращает результаты прямых выводов.
+         участвует в конъюнкции с матрицей импликации (если может). Возвращает результаты прямых выводов.
         """
         #проводим импликацию
         implication_matrix = self.implication()
 
-        i = 1
         used_parcels = []
         current_parcel = self.parcel
         new_parcels = []
-
+        global i
         while True:
             # проводим конъюнкцию
             conjunction_matrix = self.conjunction(current_parcel, implication_matrix)
             if not conjunction_matrix:
                 break
+
             # делаем вывод из матрицы конъюнкции
             direct_conclusion = self.make_conclusion(conjunction_matrix, f'{self.parcel["name"]}{i}')
             used_parcels.append(current_parcel['set'])
@@ -52,7 +54,7 @@ class Implication:
     def print_set(set: dict):
         output = f"{set['name']} = " + '{'
         for var, val in set['set'].items():
-            output += f'({var}, {val}), '
+            output += f'<{var}, {val}>, '
         print(output.removesuffix(', ') + '}')
 
     @staticmethod
@@ -88,7 +90,7 @@ class Implication:
         # проверяем, чтобы переменные в строках совпадали
         for row in implication_matrix:
             # row = [('x1,y1', 1.0), ...]
-            # если названия элементов парселя не совп. с "названиями строк" в матрице
+            # области определения не совпадают
             t = row[0][0].split(',')[0]
             if parcel_vec['set'].get(row[0][0].split(',')[0]) is None:
                 raise ValueError
@@ -99,7 +101,7 @@ class Implication:
             Implication.check_parcel_to_conjunct(parcel_vec, implication_matrix)
         except ValueError:
             return None
-        # для каждого элемента в матрице ипликации и соотв. по строке элемента в парселе ищем минимальное
+        # для каждого элемента в матрице ипликации и соотв. по строке элемента в посылке ищем минимальное
         conjunction_matrix = []
         for row in implication_matrix:
             # item = ('x1,y1', 1.0)
@@ -115,10 +117,10 @@ class Implication:
         matrix = []
         # вычисляем значения элементов матрицы
         for item1 in self.first_predicate['set'].keys():
+            val1 = self.first_predicate['set'].get(item1)
             matrix.append([
                 (f'{item1},{item2}',
-                    max(self.first_predicate['set'].get(item1),
-                        self.second_predicate['set'].get(item2))
+                 1 if val1 <= self.second_predicate['set'].get(item2) else self.second_predicate['set'].get(item2)
                  ) for item2 in self.second_predicate['set'].keys()
             ])
         return matrix

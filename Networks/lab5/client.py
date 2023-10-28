@@ -4,7 +4,7 @@ import argparse
 
 def send_request(host, port, method, path, headers, body):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((host, port))
+    client_socket.connect((host, port)) # подкл к каналу
 
     try:
         # Create an HTTP request
@@ -13,7 +13,13 @@ def send_request(host, port, method, path, headers, body):
         request += f"\r\n\r\n{body}\r\n"
 
         client_socket.send(request.encode())
+        # GET localhost:8000 HTTP/1.1
+        # "Content-Type: text/plain
 
+        # {
+        # "key":"val"
+        # }
+        #
         response = b""
         while True:
             data = client_socket.recv(1024)
