@@ -4,6 +4,8 @@
 Вариант 1: импликация Гёделя
 Задача: разработать программу, выполняющую прямой нечеткий логический вывод
 '''
+import random
+import string
 
 i = 1
 class Implication:
@@ -21,6 +23,7 @@ class Implication:
         #проводим импликацию
         implication_matrix = self.implication()
 
+
         used_parcels = []
         current_parcel = self.parcel
         new_parcels = []
@@ -32,13 +35,14 @@ class Implication:
                 break
 
             # делаем вывод из матрицы конъюнкции
-            direct_conclusion = self.make_conclusion(conjunction_matrix, f'{self.parcel["name"]}{i}')
+            direct_conclusion = self.make_conclusion(conjunction_matrix,
+                                f'{random.choice(string.ascii_uppercase)}{random.randint(1, 100)}')
             used_parcels.append(current_parcel['set'])
             # если такой вывод уже использовался (зацикливание)
             if direct_conclusion['set'] in used_parcels:
                 if len(new_parcels) == 0:
                     print('Зацикливание')
-                    return new_parcels
+                    return new_parcels, implication_matrix
                 break
             new_parcels.append(direct_conclusion)
 
@@ -48,7 +52,7 @@ class Implication:
             i += 1
 
         if len(new_parcels) == 0: print('Области определения не совпадают')
-        return new_parcels
+        return new_parcels, implication_matrix
 
     @staticmethod
     def print_set(set: dict):

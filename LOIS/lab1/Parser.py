@@ -42,17 +42,16 @@ class Parser:
                 raise RuntimeError('invalid input format')
 
     @staticmethod
-    def parse_set(set: list) -> list[dict]:
+    def parse_set(sets: list) -> list[dict]:
         """
         приводит нечеткие множества set в список с элементами формата:
         {'name': 'A', 'set': {'x1': 0.1, 'x2': 0,2}}
         """
         parsed = []
-        for item in set:
+        for item in sets:
             splited = item.split('=')
             set_values: list[str] = splited[1].replace('{' ,'').replace('}', '').split('>,')
-            parsed.append(
-                {'name': splited[0],
+            data = {'name': splited[0],
                  'set':
                      {
                         item.split(',')[0].replace('<', ''):
@@ -60,7 +59,9 @@ class Parser:
                         for item in set_values
                     }
                  }
-            )
+            if len(data.get('set')) != len(set_values):
+                print(f'Внимание! Множество {item} содержит элементы с одинаковым названием, сохранено будет только последнее вхождение этого элемента')
+            parsed.append(data)
         return parsed
 
     def parse(self):
