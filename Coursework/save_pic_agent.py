@@ -43,6 +43,8 @@ class SavePictureAgent:
             author_statement: str = None
     ):
         """
+        Результат (n:Node {name: "<pic_name>"}) связывает с  <-[:nrel_context] - (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(:Class {name: "concept_request"})
+
         USAGE:
             agent = SavePictureAgent(driver)
 
@@ -116,7 +118,7 @@ class SavePictureAgent:
 
     @staticmethod
     async def add_result_to_request_context(tx, pic_name: str):
-        await tx.run('''MATCH (n:Node {name: "%s"}), (req:Class {name: "concept_request"})
+        await tx.run('''MATCH (n:Node {name: "%s"}), (req:Node {name: "current_request"})
                         CREATE (n)<-[:nrel_context]-(req)
                      ''' % (pic_name))
 
