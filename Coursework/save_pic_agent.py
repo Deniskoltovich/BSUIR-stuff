@@ -43,7 +43,9 @@ class SavePictureAgent:
             author_statement: str = None
     ):
         """
-        Результат (n:Node {name: "<pic_name>"}) связывает с  <-[:nrel_context] - (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(:Class {name: "concept_request"})
+        Результат (n:Node {name: "<pic_name>"}) связывает с
+            <-[:nrel_context] - (cur: Node {name: 'current_request'})
+            -[:nrel_belong_to]->(:Class {name: "concept_request"})
 
         USAGE:
             agent = SavePictureAgent(driver)
@@ -59,7 +61,7 @@ class SavePictureAgent:
         :return: None
         """
 
-        async with self.driver.session() as session:
+        async with self.driver.session(database='test') as session:
             await session.execute_write(self.save_picture, name, path, statement, author, author_statement)
             await session.execute_write(self.add_result_to_request_context, name)
         return None
@@ -78,9 +80,14 @@ class SavePictureAgent:
 
         result = await tx.run(create_picture_query + author_data)
 
-
-
         return list(await result.fetch(5))
+    
+    @staticmethod
+    async def add_result_to_request_context(tx, pic_name: str):
+        await tx.run('''MATCH (n:Node {name: "%s"}), (req:Node {name: "current_request"})
+                        CREATE (n)<-[:nrel_context]-(req)
+                     ''' % (pic_name))
+
 
     @staticmethod
     async def make_picture_query(name: str, path: str, statement: str):
@@ -116,12 +123,7 @@ class SavePictureAgent:
                 create_nrel_with_illustration + create_pic_path +
                 create_pic_statement)
 
-    @staticmethod
-    async def add_result_to_request_context(tx, pic_name: str):
-        await tx.run('''MATCH (n:Node {name: "%s"}), (req:Node {name: "current_request"})
-                        CREATE (n)<-[:nrel_context]-(req)
-                     ''' % (pic_name))
-
+    
     @staticmethod
     async def make_author_query(author: str, author_statement: str):
         create_pic_nrel_with_author = '''MERGE (author:Node {name: "%s"})
@@ -153,7 +155,7 @@ async def main():
     # async with driver.session(database='test') as session:
     #     await session.execute_write(set_pic_path, 'Mona Lisa', './output_6_0.png')
     agent = SavePictureAgent(driver)
-    await agent.run(name='Картина2', path='./path2.jpg', statement='ОПИСАНИЕ2', author='АВТОР', author_statement='OGBCFYB')
+    await agent.run(name='Приплыли', path='./path2.jpg', statement='Картина Репина Приплыли', author='И. Репин', author_statement='Илья Репин')
     await driver.close()
 
 

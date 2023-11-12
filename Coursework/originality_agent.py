@@ -12,11 +12,15 @@ class OriginalityAgent:
         """
         self.driver = driver
 
+    # главный метод для запуска агента
     async def run(self, user_pic_path):
         """
-        Берет картину (:Node) <-[:nrel_context]<-(cur: Node {name: 'current_request'})-[:nrel_belong_to]->(:Class {name: "concept_request"}) и сравнивает с картиной от пользователя
+        Берет картину (:Node) <-[:nrel_context]<-(cur: Node {name: 'current_request'})
 
-        Результат записывает в (:Node {name: "<originality percentage>"}) <-[:nrel_originality] - (cur: Node {name: 'current_request'})
+                -[:nrel_belong_to]->(:Class {name: "concept_request"}) и сравнивает с картиной от пользователя
+
+        Результат записывает в (:Node {name: "<originality percentage>"})
+                <-[:nrel_originality] - (cur: Node {name: 'current_request'})
         USAGE:
                 agent = OriginalityAgent(driver)
 
@@ -41,12 +45,18 @@ class OriginalityAgent:
 
     @staticmethod
     async def add_result_to_request_context(tx, result: str):
+        """
+        Добавление результата к ноде current_request
+        """
+
         await tx.run('''MATCH (req:Node {name: "current_request"})
                         CREATE (n:Node {name: "%s"})<-[:nrel_originality]-(req)
                      ''' % result)
 
     async def get_pic_path_from_request(self, nrel_to_pic: str = 'nrel_context'):
-
+        """
+        Получение пути к изображению в БЗ
+        """
         get_pic_name = '''MATCH (req:Node {name: "current_request"})-[:%s]->(pic: Node) RETURN pic''' % nrel_to_pic
 
         get_pic_path = '''MATCH (n:Node {name: '%s'})
@@ -60,6 +70,9 @@ class OriginalityAgent:
 
     @staticmethod
     async def evaluate_originality(left, right) -> str:
+        """
+        Подсчет оригинальности
+        """
         img1 = left.convert("RGB")
         img2 = right.convert("RGB")
 
@@ -106,10 +119,9 @@ async def main():
     uri = "neo4j://localhost:7687/test"
     driver = AsyncGraphDatabase.driver(uri, auth=("neo4j", "8512962den2004"))
     agent = OriginalityAgent(driver)
-    await agent.run(user_pic_path='output_7_0.png')
-    # async with driver.session(database='test') as session:
-    #     await session.execute_write(lambda tx: tx.run('''MATCH (req:Class {name: "concept_request"}), (pic: Node {name: 'Mona Lisa'})
-    #                    CREATE (pic)<-[:context]-(req)'''))
+    async with driver.session(database='test') as session:
+        await session.execute_write(lambda tx: tx.run('''MATCH (req:Class {name: "concept_request"})
+                       CREATE (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(req)'''))
     await driver.close()
 
 

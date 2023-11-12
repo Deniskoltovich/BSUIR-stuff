@@ -19,7 +19,7 @@ def list_bills(request):
                 WHERE full_price = (
                     SELECT MAX(full_price)
                     FROM trade_bill
-                    WHERE strftime('%%Y-%%d-%%m', date) = %s
+                    WHERE strftime('%%Y-%%m-%%d', date) = %s
                 );
             ''',
             [qp])

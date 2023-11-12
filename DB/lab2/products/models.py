@@ -33,3 +33,4 @@ class PriceChangeLog(models.Model):
     company = models.CharField(max_length=128, default='')
     new_price = models.DecimalField(max_digits=11, decimal_places=2, blank=False)
     change_date = models.DateTimeField(auto_now=True)
+    
