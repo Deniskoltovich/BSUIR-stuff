@@ -36,10 +36,6 @@ class SavePictureAgent:
 
     async def run(
             self,
-            name: str,
-            path: str,
-            statement: str = None,
-            author: str = None,
             author_statement: str = None
     ):
         """
@@ -47,21 +43,29 @@ class SavePictureAgent:
             <-[:nrel_context] - (cur: Node {name: 'current_request'})
             -[:nrel_belong_to]->(:Class {name: "concept_request"})
 
-        USAGE:
-            agent = SavePictureAgent(driver)
-
-            await agent.run(name='Картина', path='./path2.jpg', statement='ОПИСАНИЕ КАРТИНЫ',
-                            author='АВТОР', author_statement= 'ОПИСАНИЕ АВТОРА')
-
-        :param name: Название картины
-        :param path: Относительный или абсолютный локальный путь к изображению
-        :param statement: Описание картины
-        :param author: Имя автора картины
         :param author_statement: Информация об авторе
         :return: None
         """
 
         async with self.driver.session(database='test') as session:
+            try:
+                author = await session.execute_read(self.get_author_name)
+                author = author.data()['req_author']['content']
+            except AttributeError:
+                author = None
+
+            pic_name = await session.execute_read(self.get_pic_name)
+            name = pic_name.data()['req_name']['content']
+
+            pic_path = await session.execute_read(self.get_pic_path)
+            path = pic_path.data()['req_url']['name']
+            try:
+                desc = await session.execute_read(self.get_desc)
+                statement = desc.data()['req_desc']['name']
+            except AttributeError:
+                statement = None
+
+
             await session.execute_write(self.save_picture, name, path, statement, author, author_statement)
             await session.execute_write(self.add_result_to_request_context, name)
         return None
@@ -76,11 +80,40 @@ class SavePictureAgent:
             author_statement: str = None
     ):
         create_picture_query: str = await SavePictureAgent.make_picture_query(name, path, statement)
-        author_data = await SavePictureAgent.make_author_query(author, author_statement) if author else ''
+        author_data = await SavePictureAgent.make_author_query(author, author_statement, name) if author else ''
 
         result = await tx.run(create_picture_query + author_data)
 
         return list(await result.fetch(5))
+
+    @staticmethod
+    async def get_author_name(tx):
+        res = await tx.run('''
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_author]->(req_author:Text) RETURN req_author
+        ''')
+        return await res.single()
+
+    @staticmethod
+    async def get_desc(tx):
+        res = await tx.run('''
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_description]->(req_desc:Node) RETURN req_desc
+        ''')
+        return await res.single()
+
+    @staticmethod
+    async def get_pic_name(tx):
+        res = await tx.run('''
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_title]->(req_name:Text) RETURN req_name
+        ''')
+        return await res.single()
+
+    @staticmethod
+    async def get_pic_path(tx):
+        res = await tx.run('''
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_url]->(req_url:Node) RETURN req_url
+        ''')
+        return await res.single()
+
     
     @staticmethod
     async def add_result_to_request_context(tx, pic_name: str):
@@ -112,7 +145,7 @@ class SavePictureAgent:
 
         create_pic_statement = ''
         if statement:
-            create_pic_statement = '''MATCH (state:Class {name: 'statement'}) , (n:Node {name: '%s'})
+            create_pic_statement = '''MATCH (state:Class {name: 'statement'}) , (n:Node {name: '%s'})-[:nrel_belong_to]->()
             CREATE (st:Node {name: "St. (%s)"})
             -[:nrel_belong_to]->(state)
             CREATE (st)-[:rrel_key_element]->(n)
@@ -125,10 +158,11 @@ class SavePictureAgent:
 
     
     @staticmethod
-    async def make_author_query(author: str, author_statement: str):
-        create_pic_nrel_with_author = '''MERGE (author:Node {name: "%s"})
-        CREATE (n)<-[:nrel_write]-(author)
-        ''' % author
+    async def make_author_query(author: str, author_statement: str, pic_name:str):
+        create_pic_nrel_with_author = '''MERGE (author:Node {name: "%s"}) WITH author
+         MATCH (ar: Class {name:'concept_artist'}), (n:Node {name: '%s'})
+        CREATE (n)<-[:nrel_write]-(author)-[:nrel_belong_to]->(ar)
+        ''' % (author, pic_name)
 
         create_autor_statement = ''
         if author_statement:
@@ -155,7 +189,7 @@ async def main():
     # async with driver.session(database='test') as session:
     #     await session.execute_write(set_pic_path, 'Mona Lisa', './output_6_0.png')
     agent = SavePictureAgent(driver)
-    await agent.run(name='Приплыли', path='./path2.jpg', statement='Картина Репина Приплыли', author='И. Репин', author_statement='Илья Репин')
+    await agent.run()
     await driver.close()
 
 

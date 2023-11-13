@@ -13,7 +13,7 @@ class OriginalityAgent:
         self.driver = driver
 
     # главный метод для запуска агента
-    async def run(self, user_pic_path):
+    async def run(self):
         """
         Берет картину (:Node) <-[:nrel_context]<-(cur: Node {name: 'current_request'})
 
@@ -24,12 +24,16 @@ class OriginalityAgent:
         USAGE:
                 agent = OriginalityAgent(driver)
 
-                await agent.run(user_pic_path='output_7_0.png')
+                await agent.run()
 
-        :param user_pic_path: Путь к картине от пользователя
         :return: None
         """
         pic_in_db_path = await self.get_pic_path_from_request(nrel_to_pic='nrel_context')
+
+        async with self.driver.session(database='test') as session:
+            pic_name = await session.execute_read(self.get_user_pic_path)
+
+        user_pic_path = pic_name.data()['t']['name']
         with Image.open(pic_in_db_path) as img1:
             img1.load()
         with Image.open(user_pic_path) as img2:
@@ -38,7 +42,7 @@ class OriginalityAgent:
         img1, img2 = await OriginalityAgent.make_the_same_size(img1, img2)
         originality_percentage: str = await OriginalityAgent.evaluate_originality(img1, img2)
 
-        async with self.driver.session() as session:
+        async with self.driver.session(database='test') as session:
             await session.execute_write(OriginalityAgent.add_result_to_request_context, originality_percentage)
 
         return None
@@ -62,11 +66,18 @@ class OriginalityAgent:
         get_pic_path = '''MATCH (n:Node {name: '%s'})
                             <-[:rrel_key_element]-(c:Node)-[:rrel_example]->(t: Text)
                             WHERE (c)-[:nrel_belong_to]->(:Class {name: "illustration"}) RETURN t'''
-        async with self.driver.session() as session:
+        async with self.driver.session(database='test') as session:
             pic_name = await session.execute_read(OriginalityAgent.execute_get_pic_name_query, get_pic_name)
             pic_path = await session.execute_read(OriginalityAgent.execute_get_pic_path_query, get_pic_path % pic_name)
 
         return pic_path
+
+    @staticmethod
+    async def get_user_pic_path(tx):
+        res = await tx.run('''
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_url]->(t:Node) RETURN t
+        ''')
+        return await res.single()
 
     @staticmethod
     async def evaluate_originality(left, right) -> str:
@@ -119,9 +130,10 @@ async def main():
     uri = "neo4j://localhost:7687/test"
     driver = AsyncGraphDatabase.driver(uri, auth=("neo4j", "8512962den2004"))
     agent = OriginalityAgent(driver)
-    async with driver.session(database='test') as session:
-        await session.execute_write(lambda tx: tx.run('''MATCH (req:Class {name: "concept_request"})
-                       CREATE (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(req)'''))
+    await agent.run()
+    # async with driver.session(database='test') as session:
+    #     await session.execute_write(lambda tx: tx.run('''MATCH (req:Class {name: "concept_request"})
+    #                    CREATE (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(req)'''))
     await driver.close()
 
 
