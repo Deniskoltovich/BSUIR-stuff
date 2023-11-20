@@ -2,30 +2,6 @@ import asyncio
 
 from neo4j import AsyncGraphDatabase
 
-# GET_PIC_PATH = '''MATCH (n:Node {name: '%s'})
-#                     <-[:rrel_key_element]-(c:Node)-[:rrel_example]->(t: Text)
-#                     WHERE (c)-[:nrel_belong_to]->(:Class {name: "illustration"})'''
-#
-#
-# async def get_monalisa_node(tx):
-#     result = await tx.run("MATCH (n:Node {name: 'test'}) RETURN n")
-#     return await result.fetch(111)
-#
-#
-# async def get_monalisas_rel_nodes(tx):
-#     result = await tx.run('MATCH (n:Node {name: "Mona Lisa"})-[]->(c) RETURN c')
-#     return await result.fetch(4)
-#
-#
-# async def get_pic_path(tx, pic_name):
-#     result = await tx.run(GET_PIC_PATH % pic_name + 'RETURN t')
-#     return await result.fetch(1)
-#
-#
-# async def set_pic_path(tx, pic_name, pic_path):
-#     result = await tx.run(GET_PIC_PATH % pic_name + 'SET t.content = "%s" ' % pic_path + 'RETURN t')
-#     return await result.fetch(1)
-
 
 class SavePictureAgent:
     def __init__(self, driver):
@@ -38,16 +14,16 @@ class SavePictureAgent:
             self,
             author_statement: str = None
     ):
-        """
-        Результат (n:Node {name: "<pic_name>"}) связывает с
-            <-[:nrel_context] - (cur: Node {name: 'current_request'})
-            -[:nrel_belong_to]->(:Class {name: "concept_request"})
-
-        :param author_statement: Информация об авторе
-        :return: None
-        """
 
         async with self.driver.session(database='test') as session:
+            exc = await session.execute_read(self.check_if_pic_exists)
+            try:
+                exc.data()
+                return False
+            except:
+                print('hhdsj')
+                pass
+
             try:
                 author = await session.execute_read(self.get_author_name)
                 author = author.data()['req_author']['content']
@@ -65,10 +41,9 @@ class SavePictureAgent:
             except AttributeError:
                 statement = None
 
-
             await session.execute_write(self.save_picture, name, path, statement, author, author_statement)
             await session.execute_write(self.add_result_to_request_context, name)
-        return None
+        return True
 
     @staticmethod
     async def save_picture(
@@ -94,9 +69,17 @@ class SavePictureAgent:
         return await res.single()
 
     @staticmethod
+    async def check_if_pic_exists(tx):
+        res = await tx.run('''
+            MATCH (cur: Node {name: 'current_request'})-[l:nrel_context]->(n:Node) RETURN n
+        ''')
+
+        return await res.single()
+
+    @staticmethod
     async def get_desc(tx):
         res = await tx.run('''
-                MATCH (cur: Node {name: 'current_request'})-[:nrel_description]->(req_desc:Node) RETURN req_desc
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_description]->(req_desc:Text) RETURN req_desc
         ''')
         return await res.single()
 
@@ -110,17 +93,15 @@ class SavePictureAgent:
     @staticmethod
     async def get_pic_path(tx):
         res = await tx.run('''
-                MATCH (cur: Node {name: 'current_request'})-[:nrel_url]->(req_url:Node) RETURN req_url
+                MATCH (cur: Node {name: 'current_request'})-[:nrel_url]->(req_url:Text) RETURN req_url
         ''')
         return await res.single()
 
-    
     @staticmethod
     async def add_result_to_request_context(tx, pic_name: str):
         await tx.run('''MATCH (n:Node {name: "%s"}), (req:Node {name: "current_request"})
                         CREATE (n)<-[:nrel_context]-(req)
                      ''' % (pic_name))
-
 
     @staticmethod
     async def make_picture_query(name: str, path: str, statement: str):
@@ -156,9 +137,8 @@ class SavePictureAgent:
                 create_nrel_with_illustration + create_pic_path +
                 create_pic_statement)
 
-    
     @staticmethod
-    async def make_author_query(author: str, author_statement: str, pic_name:str):
+    async def make_author_query(author: str, author_statement: str, pic_name: str):
         create_pic_nrel_with_author = '''MERGE (author:Node {name: "%s"}) WITH author
          MATCH (ar: Class {name:'concept_artist'}), (n:Node {name: '%s'})
         CREATE (n)<-[:nrel_write]-(author)-[:nrel_belong_to]->(ar)
@@ -183,15 +163,12 @@ class SavePictureAgent:
         return create_pic_nrel_with_author + create_autor_statement
 
 
-async def main():
-    uri = "neo4j://localhost:7687/test"
-    driver = AsyncGraphDatabase.driver(uri, auth=("neo4j", "8512962den2004"))
-    # async with driver.session(database='test') as session:
-    #     await session.execute_write(set_pic_path, 'Mona Lisa', './output_6_0.png')
+async def start_save_picture_agent():
+    uri = "bolt://localhost:7687"
+    driver = AsyncGraphDatabase.driver(uri, auth=("Vlad", "Smolnik2904"), database='test')
     agent = SavePictureAgent(driver)
     await agent.run()
     await driver.close()
 
-
-if __name__ == '__main__':
-    asyncio.run(main())
+# if __name__ == '__main__':
+#     asyncio.run(main())

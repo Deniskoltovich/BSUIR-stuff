@@ -36,7 +36,7 @@ class Implication:
 
             # делаем вывод из матрицы конъюнкции
             direct_conclusion = self.make_conclusion(conjunction_matrix,
-                                f'{random.choice(string.ascii_uppercase)}{random.randint(1, 100)}')
+                                f'{random.choice(string.ascii_uppercase)}{random.randint(1, 1000)}')
             used_parcels.append(current_parcel['set'])
             # если такой вывод уже использовался (зацикливание)
             if direct_conclusion['set'] in used_parcels:

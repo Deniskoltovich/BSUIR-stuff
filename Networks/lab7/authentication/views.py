@@ -1,5 +1,8 @@
 
 from urllib.parse import urlencode
+
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 from rest_framework import serializers
 from rest_framework.views import APIView
 from django.conf import settings
@@ -10,6 +13,8 @@ from .utils import google_get_access_token, google_get_user_info, generate_token
 from .models import User
 from rest_framework import status
 from .serializers import UserSerializer
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
@@ -67,3 +72,17 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
             }
             print('HERE')
             return Response(response_data, status=status.HTTP_200_OK)
+
+
+
+def login_user(request):
+    user_email = request.GET.get('qp')
+    user = User.objects.get(email=user_email)
+    login(request, user)
+    return redirect(reverse('list_products'))
+
+
+def logout_user(request):
+    # You can customize the URL to redirect after logout
+    print('elkdnclaksjd')
+    return LogoutView.as_view(next_page=reverse_lazy('list_products'))(request)

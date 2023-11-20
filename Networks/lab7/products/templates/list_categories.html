@@ -16,16 +16,24 @@
 
 {% for ctg in categories %}
   <li class="list-group-item">{{ctg.name }}</li>
-    <dev>
+    {% if user.is_authenticated %}
+
+    <div>
+
         <a class="nav-link active" aria-current="page" href="{% url 'delete_category' ctg.id %}">Удалить категорию</a>
 
-    </dev>
+    </div>
+                          {% endif %}
+
 
 {% endfor %}
-<dev>
+{% if user.is_authenticated %}
+<div>
                   <a class="nav-link active" aria-current="page" href="{% url 'create_category' %}">Создать категорию</a>
 
-</dev>
+</div>
+                      {% endif %}
+
 
 </ul>
 </body>

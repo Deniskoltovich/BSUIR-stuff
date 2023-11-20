@@ -41,7 +41,7 @@ const Home = () => {
 
     const redirectToBackend = () => {
     // Redirect to your backend URL (adjust the URL accordingly)
-    window.location.href = `http://127.0.0.1:8000/?qp=${localStorage.getItem('user_email')}`;
+    window.location.href = `http://127.0.0.1:8000/api/auth/login/?qp=${localStorage.getItem('user_email')}`;
   };
 
   return (

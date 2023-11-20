@@ -14,8 +14,7 @@ from Parser import Parser
 
 
 def main():
-    ##TODO: выводить матрицу, предупреждать если дикт значение переписал, имя новой посылки, если имя предиката А!
-    # done
+
 
     # Считываем информацию с файла
     with open('input2.txt', 'r') as f:
@@ -28,7 +27,7 @@ def main():
     generated_parcels = []
     for rule in parser.rules:
         print(f'\nПравило: {rule[0]}~>{rule[1]}')
-        conclusions = []
+        rule_conclusions = []
 
         first_predicate = next(predicate for predicate in parser.predicates if predicate['name'] == rule[0])
         second_predicate = next(predicate for predicate in parser.predicates if predicate['name'] == rule[1])
@@ -42,10 +41,10 @@ def main():
             print('Результат прямого вывода:')
             implication = Implication(first_predicate, second_predicate, parcel)
             conclusions, implication_matrix = implication.solve()
-            conclusions.extend(conclusions)
+            rule_conclusions.extend(conclusions)
         print('\nМатрица импликации:')
         print(*implication_matrix, sep='\n', end='\n\n')
-        generated_parcels.extend(conclusions)
+        generated_parcels.extend(rule_conclusions)
 
 
 

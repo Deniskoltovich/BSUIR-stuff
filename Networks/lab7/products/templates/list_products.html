@@ -24,9 +24,15 @@
         <p class="card-text">Code:{{ product.code}}</p>
           <p class="card-text">Category:{{ product.category.name}}</p>
           <p class="card-text">Price:{{ product.price}}</p>
-
-        <a href="{% url 'delete_product' product.id %}" class="btn btn-primary">Удалить</a>
+          {% if user.is_authenticated %}
+<div>
+<a href="{% url 'delete_product' product.id %}" class="btn btn-primary">Удалить</a>
           <a href="{% url 'update_product' product.id %}" class="btn btn-primary">Редактировать</a>
+</div>
+                      {% endif %}
+
+
+
 
 
       </div>

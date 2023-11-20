@@ -14,20 +14,6 @@ class OriginalityAgent:
 
     # главный метод для запуска агента
     async def run(self):
-        """
-        Берет картину (:Node) <-[:nrel_context]<-(cur: Node {name: 'current_request'})
-
-                -[:nrel_belong_to]->(:Class {name: "concept_request"}) и сравнивает с картиной от пользователя
-
-        Результат записывает в (:Node {name: "<originality percentage>"})
-                <-[:nrel_originality] - (cur: Node {name: 'current_request'})
-        USAGE:
-                agent = OriginalityAgent(driver)
-
-                await agent.run()
-
-        :return: None
-        """
         pic_in_db_path = await self.get_pic_path_from_request(nrel_to_pic='nrel_context')
 
         async with self.driver.session(database='test') as session:
@@ -53,9 +39,10 @@ class OriginalityAgent:
         Добавление результата к ноде current_request
         """
 
-        await tx.run('''MATCH (req:Node {name: "current_request"})
-                        CREATE (n:Node {name: "%s"})<-[:nrel_originality]-(req)
-                     ''' % result)
+        await tx.run(
+            "MATCH (req:Node {{name: 'current_request'}}) MERGE (n:Node {{name: '{node_value}'}})<-[:nrel_originality]-(req)".format(
+                node_value=result))
+        # 'MATCH (req:Сlass {name: "concept_request"}) CREATE (n:Node {name: "%s"})<-[:nrel_originality]-(req)' % result)
 
     async def get_pic_path_from_request(self, nrel_to_pic: str = 'nrel_context'):
         """
@@ -99,7 +86,7 @@ class OriginalityAgent:
         total_pixels = left_array.size
 
         percentage_difference = (different_pixels / total_pixels) * 100
-        return f'{100 -percentage_difference:.2f}%'
+        return f'{100 - percentage_difference:.2f}%'
 
     @staticmethod
     async def make_the_same_size(img1, img2):
@@ -126,16 +113,9 @@ class OriginalityAgent:
         return pic_path.data()['t']['content']
 
 
-async def main():
-    uri = "neo4j://localhost:7687/test"
-    driver = AsyncGraphDatabase.driver(uri, auth=("neo4j", "8512962den2004"))
+async def call_originally_agent():
+    uri = "bolt://localhost:7687"
+    driver = AsyncGraphDatabase.driver(uri, auth=("Vlad", "Smolnik2904"), database='test')
     agent = OriginalityAgent(driver)
     await agent.run()
-    # async with driver.session(database='test') as session:
-    #     await session.execute_write(lambda tx: tx.run('''MATCH (req:Class {name: "concept_request"})
-    #                    CREATE (cur: Node {name: 'current_request'})-[:nrel_belong_to]->(req)'''))
     await driver.close()
-
-
-if __name__ == '__main__':
-    asyncio.run(main())

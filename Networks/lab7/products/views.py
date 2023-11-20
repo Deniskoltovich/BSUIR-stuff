@@ -1,8 +1,12 @@
 import requests
 from django.db import connection
 from django.shortcuts import render, get_object_or_404, redirect
-from products.models import Product, Category, PriceChangeLog
+from django.urls import reverse
+
 from products.forms import CategoryCreationForm, ProductCreationForm
+from django.contrib.auth import authenticate, login, logout
+from authentication.models import User
+
 
 from api.serializers import ProductSerializer, CategorySerializer
 from constants import PRODUCT_URL, CATEGORY_URL
@@ -30,10 +34,10 @@ def delete_product_req(pk, url = PRODUCT_URL):
     requests.delete(url + f'{pk}/')
 
 
+
 def list_products(request):
-    print(request.COOKIES)
+
     products = get_products_req(ProductSerializer)
-    print(products)
     context = {
         'title': '',
         'products': products,

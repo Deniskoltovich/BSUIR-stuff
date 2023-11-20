@@ -24,9 +24,14 @@
           <p class="card-text">Адрес:{{ bill.country}} {{ bill.region }} {{ bill.city }}</p>
                     <p class="card-text">Дата:{{ bill.date}}</p>
 
+                        {% if user.is_authenticated %}
+    <div>
 
         <a href="{% url 'delete_bill' bill.id %}" class="btn btn-primary">Удалить</a>
           <a href="{% url 'update_bill' bill.id %}" class="btn btn-primary">Редактировать</a>
+    </div>
+
+                      {% endif %}
 
       </div>
     </div>

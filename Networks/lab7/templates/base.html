@@ -11,36 +11,64 @@
 
         <nav class="navbar navbar-expand-lg bg-dark bg-body-tertiary" data-bs-theme="dark">
             <div class="container-fluid">
+
             <a class="navbar-brand" href="{% url 'list_products' %}">Товары</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                      {% if user.is_authenticated %}
+
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'create_product' %}">Создать товар</a>
             </li>
+              {% endif %}
               <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'list_categories' %}">Категории</a>
             </li>
               <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'list_bills' %}">Накладные</a>
             </li>
+                                                {% if user.is_authenticated %}
+
               <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'create_bill' %}">Создать накладную</a>
             </li>
+          {% endif %}
               </li>
               <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'list_customers' %}">Покупатели</a>
             </li>
-              </li>
+                                                          {% if user.is_authenticated %}
+
               <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'create_customer' %}">Создать покупателя</a>
             </li>
-
+                {% endif %}
           </ul>
-
+               <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {% if user.is_authenticated %}
+                      {{user.first_name}}
+                      {% else %}
+                      Account
+                      {% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href={% url 'logout' %}>Logout</a></li>
+                                                {% else %}
+                        <li><a class="dropdown-item" href="http://127.0.0.1:3000">Login</a></li>
+                                                {% endif %}
+                    </ul>
+                  </li>
+                </ul></div>
 
         </nav>
         <div class="container-fluid">

@@ -14,12 +14,16 @@
 <body>
 <ul class="list-group">
 
-{% for ctg in objs %}
-  <li class="list-group-item">{{ctg}}</li>
-    <dev>
-    <a href="{% url 'delete_customer' ctg.id %}" class="btn btn-primary">Удалить</a>
-          <a href="{% url 'update_customer' ctg.id %}" class="btn btn-primary">Редактировать</a>
-    </dev>
+{% for cus in objs %}
+  <li class="list-group-item">{{cus}}</li>
+              {% if user.is_authenticated %}
+    <div>
+    <a href="{% url 'delete_customer' cus.id %}" class="btn btn-primary">Удалить</a>
+          <a href="{% url 'update_customer' cus.id %}" class="btn btn-primary">Редактировать</a>
+    </div>
+
+                      {% endif %}
+
 
 
 {% endfor %}
