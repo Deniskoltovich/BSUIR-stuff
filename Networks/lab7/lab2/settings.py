@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     'allauth.account',
     'products',
+    'authentication',
+    'corsheaders',
     'trade',
+    'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'profiles',
     'drf_yasg',
@@ -52,6 +55,8 @@ INSTALLED_APPS = [
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,3 +140,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'authentication.User'
+
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Add the domains from which you'll make requests
+    ]
+
+BASE_FRONTEND_URL ='http://localhost:3000'
+# Google OAuth2 settings
+GOOGLE_OAUTH2_CLIENT_ID = '195078372113-88scf8uvmn5f9bc5mqkr0alhvmf04v5i.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = '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'

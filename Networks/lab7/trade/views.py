@@ -31,6 +31,7 @@ def delete_bill_req(pk):
     requests.delete(BILL_URL+f'{pk}/')
 
 def list_bills(request):
+    print(request.user)
     context = {
         'title': 'Bills',
         'bills': get_bills_req(),

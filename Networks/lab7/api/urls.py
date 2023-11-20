@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from api.views import ProductViewSet, BillViewSet, CategoryViewSet, CustomerViewSet
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from api.auth.views import GoogleLoginView, UserRedirectView
 
 
 
@@ -22,8 +21,7 @@ router.register(r'customer', CustomerViewSet)
 
 urlpatterns = [
     path('doc/', schema_view.with_ui()),
-    path("auth/google/login/", GoogleLoginView.as_view(), name="google_login"),
-    path("~redirect/", view=UserRedirectView.as_view(), name="redirect"),
+    path("auth/", include("authentication.urls")),
     path('', include(router.urls)),
 
 ]

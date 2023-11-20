@@ -31,6 +31,7 @@ def delete_product_req(pk, url = PRODUCT_URL):
 
 
 def list_products(request):
+    print(request.COOKIES)
     products = get_products_req(ProductSerializer)
     print(products)
     context = {
