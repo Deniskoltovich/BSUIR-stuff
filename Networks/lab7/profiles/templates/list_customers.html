@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+<ul class="list-group">
+
+{% for ctg in objs %}
+  <li class="list-group-item">{{ctg}}</li>
+    <dev>
+    <a href="{% url 'delete_customer' ctg.id %}" class="btn btn-primary">Удалить</a>
+          <a href="{% url 'update_customer' ctg.id %}" class="btn btn-primary">Редактировать</a>
+    </dev>
+
+
+{% endfor %}
+
+</ul>
+</body>
+</html>
+
+{% endblock %}
