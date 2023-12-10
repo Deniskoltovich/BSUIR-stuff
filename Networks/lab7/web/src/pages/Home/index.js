@@ -88,7 +88,7 @@ const Home = () => {
       Logout
     </button>
                     <button onClick={redirectToBackend} className="bg-blue-400 hover:bg-blue-200 text-white font-semibold py-2 px-4 rounded mt-2">
-            Go to Backend
+            Home
           </button>
         </div>
       ) : (

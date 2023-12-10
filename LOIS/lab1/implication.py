@@ -6,7 +6,7 @@
 '''
 import random
 import string
-
+from utils import name_generator
 i = 1
 class Implication:
     def __init__(self, first_predicate: dict, second_predicate: dict, parcel: dict):
@@ -23,7 +23,6 @@ class Implication:
         #проводим импликацию
         implication_matrix = self.implication()
 
-
         used_parcels = []
         current_parcel = self.parcel
         new_parcels = []
@@ -35,8 +34,7 @@ class Implication:
                 break
 
             # делаем вывод из матрицы конъюнкции
-            direct_conclusion = self.make_conclusion(conjunction_matrix,
-                                f'{random.choice(string.ascii_uppercase)}{random.randint(1, 1000)}')
+            direct_conclusion = self.make_conclusion(conjunction_matrix)
             used_parcels.append(current_parcel['set'])
             # если такой вывод уже использовался (зацикливание)
             if direct_conclusion['set'] in used_parcels:
@@ -62,10 +60,11 @@ class Implication:
         print(output.removesuffix(', ') + '}')
 
     @staticmethod
-    def make_conclusion(conjunction_matrix: list[list[tuple]], name: str):
+    def make_conclusion(conjunction_matrix: list[list[tuple]]):
         """
         Делает прямой вывод из матрицы конъюнкции
         """
+        name = next(name_generator)
         supremos = [] # список макс значений по столбцам
         for col_idx in range(len(conjunction_matrix[0])):
             supremos.append(max(

@@ -5,6 +5,7 @@
 Задача: разработать программу, выполняющую прямой нечеткий логический вывод
 '''
 
+NAMES = []
 
 import re
 from itertools import chain
@@ -70,3 +71,6 @@ class Parser:
         self.validate()
         self.predicates = self.parse_set(self.predicates)
         self.rules = [rule.split('~>') for rule in self.rules]
+        global NAMES
+        for predicate in self.predicates:
+            NAMES.append(predicate.get('name'))

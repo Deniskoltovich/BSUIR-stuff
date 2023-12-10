@@ -40,14 +40,14 @@ def list_bills(request):
     return render(request, 'list_bills.html', context=context)
 
 def update_bill(request, id):
-    bill = get_bill_req(id)
+    bill = Bill.objects.get(id=id)
     if request.method == 'POST':
-        form = BillCreationForm(request.POST)
+        form = BillCreationForm(request.POST, instance=bill)
         if form.is_valid():
             form.save()
             return redirect('list_bills')
     else:
-        form = BillCreationForm()
+        form = BillCreationForm(instance=bill)
 
     context = {'form': form}
 

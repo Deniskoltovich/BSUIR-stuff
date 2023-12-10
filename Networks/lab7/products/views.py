@@ -10,6 +10,8 @@ from authentication.models import User
 
 from api.serializers import ProductSerializer, CategorySerializer
 from constants import PRODUCT_URL, CATEGORY_URL
+from products.models import Product
+
 
 def get_product_req(pk, serializer, url = PRODUCT_URL):
     response = requests.get(url+f'{pk}/')
@@ -46,13 +48,14 @@ def list_products(request):
     return render(request, 'list_products.html', context=context)
 
 def update_product(request, id):
+    instance = Product.objects.get(id=id)
     if request.method == 'POST':
-        form = ProductCreationForm(request.POST)
+        form = ProductCreationForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
             return redirect('list_products')
     else:
-        form = ProductCreationForm()
+        form = ProductCreationForm(instance=instance)
 
     context = {'form': form}
 

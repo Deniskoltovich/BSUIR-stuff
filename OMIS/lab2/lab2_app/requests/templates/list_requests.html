@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Активные запросы</h2>
+    <div class="row">
+        {% for obj in requests %}
+
+ <div class="col-sm-6 mb-3 mb-sm-0">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Сотрудник: {{obj.employee}}</h6>
+          <h6 class="card-title">Объект: {{obj.department}}</h6>
+                  <a href="{%url 'decline_request' obj.id  %}" class="btn btn-primary">Отклонить запрос</a>
+        <a href="{%url 'accept_request' obj.id %}" class="btn btn-primary">Принять запрос</a>
+
+      </div>
+    </div>
+        {%endfor%}
+
+
+</div>
+{% endblock %}

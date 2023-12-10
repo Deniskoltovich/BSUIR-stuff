@@ -17,7 +17,7 @@ def main():
 
 
     # Считываем информацию с файла
-    with open('input2.txt', 'r') as f:
+    with open('input.txt', 'r') as f:
         data = f.readlines()
 
     # Парсим информацию, которую считали с файла

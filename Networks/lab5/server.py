@@ -76,7 +76,7 @@ def handle_options():
 def main():
     # Create an ArgumentParser to handle command-line arguments
     parser = argparse.ArgumentParser(description="Simple HTTP server")
-    parser.add_argument("--port", type=int, default=8000, help="Port to listen on")
+    parser.add_argument("--port", type=int, default=8001, help="Port to listen on")
     args = parser.parse_args()
 
     host = '127.0.0.1'
