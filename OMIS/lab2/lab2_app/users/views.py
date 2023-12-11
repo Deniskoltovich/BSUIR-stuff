@@ -1,156 +1,194 @@
-from django.views.generic.edit import FormView
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from .forms import AdminCreationForm, EmployeeCreationForm, ChangeGroupForm, ChangeUserForm, ChangePasswordForm
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from users.models import Employee, UserGroup, Admin
+from django.contrib.auth import login, logout
+from .models import Employee
 
 from utils.common import get_current_user
+from django.views import View
 
-def logout_user(request):
-    logout(request)
-    return redirect(reverse('login'))
+from .services.access_changing import AccessChangingService
+from .services.employee_profile import EmployeeProfileService
+from .services.registration import RegistrationService
+from .services.user_management import UserManagementService
 
 
+@method_decorator(login_required, name="get")
+class LogoutUserView(View):
+    '''Выход из системы'''
 
-def register(request):
-    user, is_admin = get_current_user(request)
+    def get(self, request):
+        logout(request)
+        return redirect(reverse('login'))
 
-    if request.method == 'POST':
+
+class RegistrationController(View):
+    template_name = 'registration/register.html'
+
+    def get(self, request):
+        form = AdminCreationForm()
+        context = {'form': form, 'is_admin': True}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
         form = AdminCreationForm(request.POST)
+
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('fullname')
-            password = form.cleaned_data.get('password')
-            user = get_user_model().objects.create_user(username=username, password=password)
-
-            user = authenticate(
-                username=username,
-                password=password
-            )
+            user = RegistrationService.register(form.cleaned_data)
             login(request, user)
             return redirect(reverse('list_users'))
-    else:
-        form = AdminCreationForm()
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'registration/register.html', context)
+        context = {'form': form, 'is_admin': True}
+        return render(request, self.template_name, context)
 
 
-def list_users(request):
-    user, is_admin = get_current_user(request)
-    if not is_admin:
-        return redirect('get_available_objects')
+@method_decorator(login_required, name="get")
+class DisplayUserController(View):
+    """
+    Контроллер отображения сотрудников
+    """
+    template_name = 'list_employees.html'
 
-    users = Employee.objects.all()
-    return render(request, 'list_employees.html', {'is_admin': is_admin,'employees': users})
+    def get(self, request, id=None):
+        user, is_admin = get_current_user(request)
+        if not id:
+            # просмотр сотрудников
+            if not is_admin:
+                return redirect('get_available_objects')
 
-def create_employee(request):
-    user, is_admin = get_current_user(request)
+            users = UserManagementService.get_employees()
+            context = {'is_admin': is_admin, 'employees': users}
+            return render(request, self.template_name, context)
+        # активность сотрудника
+        employee, activities = UserManagementService.get_user_activities(id)
+        context = {'employee': employee,
+                   'activities': activities,
+                   'is_admin': is_admin
+                   }
 
-    if request.method == 'POST':
+        return render(request, 'get_activities.html', context)
+
+
+@method_decorator(login_required, name="get")
+@method_decorator(login_required, name="post")
+class EmployeeProfileController(View):
+    '''
+    Контроллер управления профилем сотрудника
+    '''
+    template_name = 'create_employee.html'
+
+    def get(self, request):
+        user, is_admin = get_current_user(request)
+        form = EmployeeCreationForm()
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
+
+    @method_decorator(login_required)
+    def post(self, request):
+        user, is_admin = get_current_user(request)
         form = EmployeeCreationForm(request.POST)
         if form.is_valid():
-            user_group, _ = UserGroup.objects.get_or_create(department_name=form.cleaned_data.get('department'))
-            print(form.cleaned_data.get('available_departments'))
-            available_department = form.cleaned_data.pop('available_departments').first()
-
-            employee = Employee.objects.create(user_group=user_group, **form.cleaned_data)
-            employee.available_departments.add(available_department.id)
-
-            username = form.cleaned_data.get('fullname')
-            password = form.cleaned_data.get('password')
-
-            user = get_user_model().objects.create_user(username=username, password=password)
-
+            EmployeeProfileService.create_profile(form.cleaned_data)
             return redirect(reverse('list_users'))
-    else:
-        form = EmployeeCreationForm()
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'create_employee.html', context)
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
-def change_password(request):
-    user, is_admin = get_current_user(request)
 
-    if request.method == 'POST':
+@method_decorator(login_required, name="get")
+@method_decorator(login_required, name="post")
+class ChangePasswordController(View):
+    template_name = 'change_password.html'
+
+    def get(self, request):
+        user, is_admin = get_current_user(request)
+        form = ChangePasswordForm()
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        user, is_admin = get_current_user(request)
         form = ChangePasswordForm(request.POST)
+
         if form.is_valid():
-            request.user.set_password('new password')
-            request.user.save()
-            password = form.cleaned_data.get('password')
-            user, _ = get_current_user(request)
-            user.change_password(password)
+            new_password = form.cleaned_data.get('password')
+            EmployeeProfileService.change_password(request.user, new_password)
 
             return redirect(reverse('get_available_objects'))
-    else:
-        form = ChangePasswordForm()
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'change_password.html', context)
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
 
-def change_user_group(request):
-    user, is_admin = get_current_user(request)
+@method_decorator(login_required, name="get")
+@method_decorator(login_required, name="post")
+class ChangeUserGroupController(View):
+    '''
+    Контроллер изменения доступа группам
+    '''
+    template_name = 'change_group.html'
 
-    if request.method == 'POST':
+    def get(self, request):
+        user, is_admin = get_current_user(request)
+        form = ChangeGroupForm()
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        user, is_admin = get_current_user(request)
         form = ChangeGroupForm(request.POST)
+
         if form.is_valid():
             action = form.cleaned_data.get('action')
             department_name = form.cleaned_data.get('department_name')
-            employees = Employee.objects.filter(department=department_name)
+            user_group = Employee.objects.filter(department=department_name)
             department = form.cleaned_data.get('access_department')
+
             if action == 'Add':
-                for employee in employees:
-                    employee.available_departments.add(department.id)
+                AccessChangingService.add_group_access(user_group, department)
 
             if action == 'Delete':
-                for employee in employees:
-                    employee.available_departments.remove(department)
-
+                AccessChangingService.remove_group_access(user_group, department)
 
             return redirect(reverse('list_users'))
-    else:
-        form = ChangeGroupForm()
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'change_group.html', context)
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
 
-def get_user_activities(request, id):
-    user, is_admin = get_current_user(request)
+@method_decorator(login_required, name="get")
+@method_decorator(login_required, name="post")
+class ChangeAccessForUserController(View):
+    '''
+    Контроллер изменения доступов пользователю
+    '''
+    template_name = 'change_user.html'
 
-    employee = Employee.objects.get(pk=id)
-    activities = employee.get_activities()
+    def get(self, request):
+        user, is_admin = get_current_user(request)
+        form = ChangeUserForm()
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
-    return render(request, 'get_activities.html', {'employee': employee, 'activities': activities})
-
-
-def change_access_for_user(request):
-    user, is_admin = get_current_user(request)
-
-    if request.method == 'POST':
+    def post(self, request):
+        user, is_admin = get_current_user(request)
         form = ChangeUserForm(request.POST)
+
         if form.is_valid():
             action = form.cleaned_data.get('action')
             employee = form.cleaned_data.get('user')
             dep = form.cleaned_data.get('access_department')
+
             if action == 'Add':
-                employee.available_departments.add(dep.id)
+                AccessChangingService.add_employee_access(employee, dep)
 
             if action == 'Delete':
-                employee.available_departments.remove(dep)
-
+                AccessChangingService.remove_employee_access(employee, dep)
 
             return redirect(reverse('list_users'))
-    else:
-        form = ChangeUserForm()
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'change_user.html', context)
-
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)

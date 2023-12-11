@@ -1,6 +1,6 @@
 from django.db import models
 from departments.models import Department
-from requests import abstract
+from requests.abstract import models as abstract
 from users.models import Employee
 
 

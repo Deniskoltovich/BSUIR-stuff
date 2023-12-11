@@ -1,7 +1,7 @@
 from django.db import models
 from departments.models import Department
 from users.enums import ActionType
-from users import abstract
+from users.abstract import models as abstract
 
 
 class UserGroup(abstract.IUserGroup):

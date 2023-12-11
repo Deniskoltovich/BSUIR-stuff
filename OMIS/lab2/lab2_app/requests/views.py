@@ -1,49 +1,64 @@
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from utils.common import get_current_user
 from .forms import RequestCreationForm
-from .models import Request
+from django.views import View
+from .services.request_management import RequestManagementService
 
 
-def create_request(request):
-    user, is_admin = get_current_user(request)
+@method_decorator(login_required, name="get")
+@method_decorator(login_required, name="post")
+class CreateRequestView(View):
+    """Контроллер создания запросов на доступ """
 
-    if request.method == 'POST':
-        form = RequestCreationForm(request.POST)
-        if form.is_valid():
-            dep = form.cleaned_data.get('department')
-            Request.objects.create(department=dep, employee=user)
+    template_name = 'request_creation.html'
 
-            return redirect(reverse('get_available_objects'))
-    else:
+    def get(self, request):
+        user, is_admin = get_current_user(request)
         form = RequestCreationForm()
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
-    context = {'form': form,
-               'is_admin': is_admin}
-    return render(request, 'request_creation.html', context)
+    def post(self, request):
+        user, is_admin = get_current_user(request)
+        form = RequestCreationForm(request.POST)
 
-def list_requests(request):
-    user, is_admin = get_current_user(request)
+        if form.is_valid():
+            RequestManagementService.create_request(form.cleaned_data, user)
+            return redirect(reverse('get_available_objects'))
 
-    requests = Request.objects.filter(status='Ожидание')
-    context = {
-        'requests': requests,
-        'is_admin': is_admin}
+        context = {'form': form, 'is_admin': is_admin}
+        return render(request, self.template_name, context)
 
-    return render(request, 'list_requests.html', context)
 
-def accept_request(request, id):
-    user, is_admin = get_current_user(request)
+@method_decorator(login_required, name="get")
+class ListRequestsController(View):
+    """Контроллер просмотра запросов на доступ """
+    template_name = 'list_requests.html'
 
-    request_ = Request.objects.get(pk=id)
-    request_.status = 'Принят'
-    request_.employee.available_departments.add(request_.department.id)
-    request_.save()
-    return redirect('list_requests')
+    def get(self, request):
+        user, is_admin = get_current_user(request)
 
-def decline_request(request, id):
-    user, is_admin = get_current_user(request)
+        requests = RequestManagementService.get_requests()
+        context = {'requests': requests, 'is_admin': is_admin}
 
-    request_ = Request.objects.get(pk=id)
-    request_.status = 'Отклонен'
-    request_.save()
-    return redirect('list_requests')
+        return render(request, self.template_name, context)
+
+
+@method_decorator(login_required, name="get")
+class AcceptRequestController(View):
+    """Принятия запроса на доступ"""
+
+    def get(self, request, id):
+        RequestManagementService.change_request_status(id, 'Принят')
+        return redirect('list_requests')
+
+
+@method_decorator(login_required, name="get")
+class DeclineRequestController(View):
+    """Отклонение запроса на доступ"""
+
+    def get(self, request, id):
+        RequestManagementService.change_request_status(id, 'Отклонен')
+        return redirect('list_requests')

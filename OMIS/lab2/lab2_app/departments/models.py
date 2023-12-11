@@ -1,5 +1,5 @@
 from django.db import models
-from departments import abstract
+from departments.abstract import models as abstract
 
 
 class Department(abstract.IDepartment):
