@@ -21,7 +21,6 @@ class Employee(abstract.IEmployee):
     position = models.CharField(max_length=64, null=False)
     password = models.CharField(max_length=64, null=False)
     available_departments = models.ManyToManyField(Department)
-    # TODO
     user_group = models.ForeignKey(UserGroup, on_delete=models.CASCADE)
     # activities создается автоматически
 
@@ -52,7 +51,6 @@ class Activity(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     action = models.CharField(max_length=5, choices=ActionType)
     date = models.DateTimeField(auto_now_add=True)
-    # TODO: диаграмма исправить
     user = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     class Meta:
