@@ -6,6 +6,8 @@ from users.abstract import models as abstract
 
 class UserGroup(abstract.IUserGroup):
     department_name = models.CharField(max_length=64, null=False)
+    # employee_set создается автоматически (список сотрудников)
+
 
     def get_users(self):
         return self.employee_set.all()
@@ -15,14 +17,16 @@ class UserGroup(abstract.IUserGroup):
 
 
 class Employee(abstract.IEmployee):
-
+    '''
+    Сотрудник
+    '''
     fullname = models.CharField(max_length=128, null=False)
     department = models.CharField(max_length=64, null=False)
     position = models.CharField(max_length=64, null=False)
     password = models.CharField(max_length=64, null=False)
     available_departments = models.ManyToManyField(Department)
     user_group = models.ForeignKey(UserGroup, on_delete=models.CASCADE)
-    # activities создается автоматически
+    # activity_set создается автоматически
 
     def get_available_objects(self):
         return self.available_departments.all()
@@ -60,6 +64,8 @@ class Activity(models.Model):
 class Admin(abstract.IAdmin):
     fullname = models.CharField(max_length=128, null=False)
     password = models.CharField(max_length=64, null=False)
+    # request_set список запросов создается автоматически
+
 
     def get_password(self):
         return self.password

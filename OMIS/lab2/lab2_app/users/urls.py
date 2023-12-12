@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import RegistrationController, DisplayUserController, EmployeeProfileController, ChangeUserGroupController, ChangeAccessForUserController, LogoutUserView, ChangePasswordController
+
+
+## МАППИНГ УРЛОВ И КОНТРОЛЛЕРОВ
 urlpatterns = [
     path('register/', RegistrationController.as_view(), name='register'),
     path('login/', include('django.contrib.auth.urls')),

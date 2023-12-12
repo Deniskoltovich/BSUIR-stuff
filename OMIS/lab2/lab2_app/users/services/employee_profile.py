@@ -7,6 +7,7 @@ from users.abstract.services import IEmployeeProfileService
 class EmployeeProfileService(IEmployeeProfileService):
     @staticmethod
     def create_profile(cleaned_data: dict):
+        # получаем к какой группе относится пользователь (по названию отдела). Если такой группы нет, то создаем
         user_group, _ = UserGroup.objects.get_or_create(department_name=cleaned_data.get('department'))
         available_department = cleaned_data.pop('available_departments').first()
 

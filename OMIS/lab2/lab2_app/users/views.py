@@ -25,14 +25,18 @@ class LogoutUserView(View):
 
 
 class RegistrationController(View):
+    '''Регистрация'''
+
     template_name = 'registration/register.html'
 
     def get(self, request):
+        '''Если пользователь только зашел на страницу, просто отображаем форму'''
         form = AdminCreationForm()
         context = {'form': form, 'is_admin': True}
         return render(request, self.template_name, context)
 
     def post(self, request):
+        '''Пользователь уже ввел данные и отправил форму'''
         form = AdminCreationForm(request.POST)
 
         if form.is_valid():
@@ -54,15 +58,15 @@ class DisplayUserController(View):
 
     def get(self, request, id=None):
         user, is_admin = get_current_user(request)
+        # если not id, то пользователь хочет получить список сотрудников, иначе активность конкретного сотрудника
         if not id:
-            # просмотр сотрудников
             if not is_admin:
                 return redirect('get_available_objects')
-
+            # получаем сотрудников для страницы просмотра сотрудников
             users = UserManagementService.get_employees()
             context = {'is_admin': is_admin, 'employees': users}
             return render(request, self.template_name, context)
-        # активность сотрудника
+        # получаем активность сотрудника для страницы активности
         employee, activities = UserManagementService.get_user_activities(id)
         context = {'employee': employee,
                    'activities': activities,
@@ -81,6 +85,8 @@ class EmployeeProfileController(View):
     template_name = 'create_employee.html'
 
     def get(self, request):
+        '''Если пользователь только зашел на страницу, просто отображаем форму'''
+
         user, is_admin = get_current_user(request)
         form = EmployeeCreationForm()
         context = {'form': form, 'is_admin': is_admin}
@@ -88,6 +94,7 @@ class EmployeeProfileController(View):
 
     @method_decorator(login_required)
     def post(self, request):
+        '''Пользователь уже ввел данные и отправил форму'''
         user, is_admin = get_current_user(request)
         form = EmployeeCreationForm(request.POST)
         if form.is_valid():
@@ -142,11 +149,12 @@ class ChangeUserGroupController(View):
         form = ChangeGroupForm(request.POST)
 
         if form.is_valid():
+            # берем данные из формы
             action = form.cleaned_data.get('action')
             department_name = form.cleaned_data.get('department_name')
             user_group = Employee.objects.filter(department=department_name)
             department = form.cleaned_data.get('access_department')
-
+            # в зависимости от действия убираем или добавляем доступ группам
             if action == 'Add':
                 AccessChangingService.add_group_access(user_group, department)
 
