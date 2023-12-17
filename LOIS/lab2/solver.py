@@ -115,63 +115,63 @@ class Solver:
         print(repr, end='\n\n')
 
 
-if __name__ == '__main__':
-    rule = {
-        'name': 'R',
-        'set': {
-            'x1,y1': 0.7,
-            'x1,y2': 0.1,
-            'x1,y3': 0.2,
-            'x2,y1': 0.7,
-            'x2,y2': 0.3,
-            'x2,y3': 0.1,
-        }
-    }
-    logical_conclusion = {
-        'name': 'A',
-        'set': {
-            'y1': 0.7,
-            'y2': 0.3,
-            'y3': 0.2
-        }
-    }
-    # rule = {
-    #     'name': 'R',
-    #     'set': {
-    #         'x1,y1': 0.7,
-    #         'x1,y2': 0.1,
-    #         'x1,y3': 0.1,
-    #         'x2,y1': 0.5,
-    #         'x2,y2': 0.1,
-    #         'x2,y3': 0.1,
-    #     }
-    # }
-    # logical_conclusion = {
-    #     'name': 'A',
-    #     'set': {
-    #         'y1': 0.6,
-    #         'y2': 0.2,
-    #         'y3': 0.2
-    #     }
-    # }
-    # rule = {
-    #     'name': 'R',
-    #     'set': {
-    #         'x1,y1': 0.7,
-    #         'x1,y2': 0.8,
-    #         'x1,y3': 0.3,
-    #         'x2,y1': 0.7,
-    #         'x2,y2': 0.8,
-    #         'x2,y3': 0.3,
-    #     }
-    # }
-    # logical_conclusion = {
-    #     'name': 'A',
-    #     'set': {
-    #         'y1': 0.7,
-    #         'y2': 0.8,
-    #         'y3': 0.3
-    #     }
-    # }
-    solver = Solver(logical_conclusion, rule)
-    solver.run()
+# if __name__ == '__main__':
+#     rule = {
+#         'name': 'R',
+#         'set': {
+#             'x1,y1': 0.7,
+#             'x1,y2': 0.1,
+#             'x1,y3': 0.2,
+#             'x2,y1': 0.7,
+#             'x2,y2': 0.3,
+#             'x2,y3': 0.1,
+#         }
+#     }
+#     logical_conclusion = {
+#         'name': 'A',
+#         'set': {
+#             'y1': 0.7,
+#             'y2': 0.3,
+#             'y3': 0.2
+#         }
+#     }
+#     rule = {
+#         'name': 'R',
+#         'set': {
+#             'x1,y1': 0.7,
+#             'x1,y2': 0.1,
+#             'x1,y3': 0.1,
+#             'x2,y1': 0.5,
+#             'x2,y2': 0.1,
+#             'x2,y3': 0.1,
+#         }
+#     }
+#     logical_conclusion = {
+#         'name': 'A',
+#         'set': {
+#             'y1': 0.6,
+#             'y2': 0.2,
+#             'y3': 0.2
+#         }
+#     }
+#     rule = {
+#         'name': 'R',
+#         'set': {
+#             'x1,y1': 0.7,
+#             'x1,y2': 0.8,
+#             'x1,y3': 0.3,
+#             'x2,y1': 0.7,
+#             'x2,y2': 0.8,
+#             'x2,y3': 0.3,
+#         }
+#     }
+#     logical_conclusion = {
+#         'name': 'A',
+#         'set': {
+#             'y1': 0.7,
+#             'y2': 0.8,
+#             'y3': 0.3
+#         }
+#     }
+#     solver = Solver(logical_conclusion, rule)
+#     solver.run()
