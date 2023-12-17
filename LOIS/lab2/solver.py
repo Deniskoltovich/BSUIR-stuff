@@ -107,8 +107,8 @@ class Solver:
         for res in result:
             repr += '('
             for key, value in sorted(res.items()):
-                repr += f'{list(value)}*'
-            repr = repr.removesuffix('*') + ') U '
+                repr += f'{list(value)} × '
+            repr = repr.removesuffix(' × ') + ') U '
 
         repr = repr.removesuffix('U ')
 
