@@ -1,3 +1,10 @@
+'''
+Лабораторная работа №2 по дисциплине ЛОИС
+Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д., Кимстачем Д.
+Вариант 6: нечеткая композиция (max({min({x_i} U {y_i}) | i})
+Задача: разработать программу, выполняющую обратный нечеткий логический вывод
+'''
+
 class Solver:
     def __init__(self, logical_conclusion: dict, rule: dict):
         self.logical_conclusion = logical_conclusion
@@ -6,20 +13,24 @@ class Solver:
         self.varnames = {self.get_first_var_name(key) for key in rule['set'].keys()}
 
     def run(self):
+        # составляем систему уравнений
         self.make_equations()
         solutions = []
-        for eq in solver.equations:
+        # решаем каждое уравнение
+        for eq in self.equations:
             solutions.extend(self.solve_equation(eq))
+        # ищем пересечения
         result = self.find_intersections(solutions)
 
         if len(result) == 0:
             print('Нельзя построить обратный вывод!')
             return
 
+        print('Результатом обратного вывода будет предикат С такой, что')
         self.print_result(result)
 
-
     def find_intersections(self, solutions):
+        """ищет пересечение интервалов среди всех решений"""
         intersections = []
         for varname in sorted(self.varnames):
             # varname_intervals [(0.1, 1.0), (0.7, 0.1), ...]
@@ -38,14 +49,12 @@ class Solver:
 
         return intersections
 
-
-
     def make_equations(self):
         """Создает систему уравнений на основе правила и множества следствий"""
-        for name, value in logical_conclusion['set'].items():
+        for name, value in self.logical_conclusion['set'].items():
             equation = {'right_part': value}
             left_part = []
-            for name1, value1 in rule['set'].items():
+            for name1, value1 in self.rule['set'].items():
                 if self.get_second_var_name(name1) == name:
                     min_set = (value1, self.get_first_var_name(name1))
                     left_part.append(min_set)
@@ -57,6 +66,7 @@ class Solver:
 
     @staticmethod
     def solve_equation(equation):
+        """решает уравнение логическим методом"""
         solutions = []
         var_names = [varname[1] for varname in equation['left_part']]
         for min_set in equation['left_part']:
@@ -88,7 +98,6 @@ class Solver:
     def get_first_var_name(elem_name: str):
         return elem_name.split(',')[0]
 
-
     def print_result(self, result):
         repr = '<'
         for var in sorted(self.varnames):
@@ -103,11 +112,7 @@ class Solver:
 
         repr = repr.removesuffix('U ')
 
-        print(repr)
-
-
-
-
+        print(repr, end='\n\n')
 
 
 if __name__ == '__main__':
