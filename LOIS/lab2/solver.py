@@ -1,11 +1,13 @@
 '''
 Лабораторная работа №2 по дисциплине ЛОИС
 Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д., Кимстачем Д.
+Алгоритм продумывался совместно со студентами группы 121702 Летко А., Нагла Н., Голушко Д.
 Вариант 6: нечеткая композиция (max({min({x_i} U {y_i}) | i})
 Задача: разработать программу, выполняющую обратный нечеткий логический вывод
 '''
+from itertools import product
 
-class Solver:
+class InverseFuzzyInference:
     def __init__(self, logical_conclusion: dict, rule: dict):
         self.logical_conclusion = logical_conclusion
         self.rule = rule
@@ -16,38 +18,51 @@ class Solver:
         # составляем систему уравнений
         self.make_equations()
         solutions = []
+
         # решаем каждое уравнение
         for eq in self.equations:
-            solutions.extend(self.solve_equation(eq))
-        # ищем пересечения
-        result = self.find_intersections(solutions)
+            solutions.append(self.solve_equation(eq))
 
-        if len(result) == 0:
+        # ищем пересечения
+        permutations = list(product(*solutions))
+
+        result_intersections = []
+        for solution in permutations:
+            result = self.find_intersection(solution)
+            if result and result not in result_intersections:
+                result_intersections.append(result)
+
+
+        if len(result_intersections) == 0:
             print('Нельзя построить обратный вывод!')
             return
 
         print('Результатом обратного вывода будет предикат С такой, что')
-        self.print_result(result)
+        self.print_result(result_intersections)
 
-    def find_intersections(self, solutions):
-        """ищет пересечение интервалов среди всех решений"""
+    def find_intersection(self, solutions):
+        # solution ({'x1': (0.1, 0.3), 'x2': (0.0, 1.0)},
+        # {'x1': (0.1, 0.2), 'x2': (0.0, 1.0)},
+        # {'x1': (0.3, 0.3), 'x2': (0.0, 1.0)})
+
         intersections = []
         for varname in sorted(self.varnames):
-            # varname_intervals [(0.1, 1.0), (0.7, 0.1), ...]
             varname_intervals = [solution[varname] for solution in solutions if solution.get(varname)]
             if len(varname_intervals) == 0:
-                continue
+                raise RuntimeError('Пересечений нет!')
+
             intersection = {varname: (
-                max(inter[varname][0] for inter in varname_intervals),
-                min(inter[varname][1] for inter in varname_intervals)
-            ) for varname in self.varnames}
+                max(interval[0] for interval in varname_intervals),
+                min(interval[1] for interval in varname_intervals))
+            }
 
             if any(value[0] > value[1] for value in intersection.values()):
-                continue
+                return None
 
             intersections.append(intersection)
 
         return intersections
+
 
     def make_equations(self):
         """Создает систему уравнений на основе правила и множества следствий"""
@@ -69,7 +84,9 @@ class Solver:
         """решает уравнение логическим методом"""
         solutions = []
         var_names = [varname[1] for varname in equation['left_part']]
+
         for min_set in equation['left_part']:
+
             # min_set (0.1, 'x1')
             solution = {}  # solution {'x1': (0.1, 1.0)}
             if min_set[0] == equation['right_part']:
@@ -83,10 +100,20 @@ class Solver:
                     min_set[1]: (equation['right_part'], equation['right_part'])
                 }
 
-            solution.update({
-                name: (0.0, 1.0) for name in var_names if name != min_set[1]
-            })
-            solutions.append({min_set[1]: solution})
+            for other_min_set in equation['left_part']:
+                if other_min_set == min_set:
+                    continue
+
+                if other_min_set[0] > equation['right_part']:
+                    solution.update({
+                        other_min_set[1]: (0.0, equation['right_part'])
+                    })
+                else:
+                    solution.update({
+                        other_min_set[1]: (0.0, 1.0)
+                    })
+
+            solutions.append(solution)
 
         return solutions
 
@@ -103,11 +130,15 @@ class Solver:
         for var in sorted(self.varnames):
             repr += f'C({var}),'
         repr = repr.removesuffix(',') + '> ∈ '
-
         for res in result:
             repr += '('
-            for key, value in sorted(res.items()):
-                repr += f'{list(value)} × '
+            for value in res:
+                for value in value.values():
+                    left, right = value
+                if left == right:
+                    repr += f'{left} × '
+                else:
+                    repr += f'{[left, right]} × '
             repr = repr.removesuffix(' × ') + ') U '
 
         repr = repr.removesuffix('U ')
