@@ -7,6 +7,7 @@
 '''
 from itertools import product
 
+
 class InverseFuzzyInference:
     def __init__(self, logical_conclusion: dict, rule: dict):
         self.logical_conclusion = logical_conclusion
@@ -34,11 +35,12 @@ class InverseFuzzyInference:
 
 
         if len(result_intersections) == 0:
-            print('Нельзя построить обратный вывод!')
-            return
+            res = 'Нельзя построить обратный вывод!'
+            print(res)
+            return res
 
         print('Результатом обратного вывода будет предикат С такой, что')
-        self.print_result(result_intersections)
+        return self.print_result(result_intersections)
 
     def find_intersection(self, solutions):
         # solution ({'x1': (0.1, 0.3), 'x2': (0.0, 1.0)},
@@ -144,6 +146,8 @@ class InverseFuzzyInference:
         repr = repr.removesuffix('U ')
 
         print(repr, end='\n\n')
+
+        return repr
 
 
 # if __name__ == '__main__':
