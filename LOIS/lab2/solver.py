@@ -24,11 +24,10 @@ class InverseFuzzyInference:
         for eq in self.equations:
             solutions.append(self.solve_equation(eq))
 
-        # ищем пересечения
-        permutations = list(product(*solutions))
+        combiantion = list(product(*solutions))
 
         result_intersections = []
-        for solution in permutations:
+        for solution in combiantion:
             result = self.find_intersection(solution)
             if result and result not in result_intersections:
                 result_intersections.append(result)

@@ -11,7 +11,7 @@ from solver import InverseFuzzyInference
 
 if __name__ == '__main__':
     # Считываем информацию с файла
-    with open('inputs/input6.txt', 'r') as f:
+    with open('inputs/input7.txt', 'r') as f:
         data = f.readlines()
 
     parser = Parser(data)
