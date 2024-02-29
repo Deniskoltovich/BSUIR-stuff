@@ -1,4 +1,13 @@
+'''
+Лабораторная работа №1 по дисциплине МРЗВиС
+Выполнена студентами группы 121702 БГУИР Колтовичем Д., Зайцем Д.
+Вариант 1: умножение 4-разрядных чисел(с младших разрядов) со сдвигом множимого влево
+Задача: разработать программу, выполняющую вычисление попарного произведения компонентов двух векторов
+'''
+
+
 NUM_SIZE = 4
+
 
 def binary_addition(num1: list, num2: list):
     result = []
@@ -28,7 +37,7 @@ def binary_multiplication_generator(multiplier, multiplicand):
 
     partial_addition = [0] * 8
     for i in range(len(multiplicand) - 1, -1, -1):
-        # умножаем multiplier на разряд multiplicand и делаем сдвиг (0 справа)
+        # умножаем multiplier на разряд multiplicand и делаем сдвиг влево (0 справа)
         partial_product = [multiplicand[i] * multiplier_i for multiplier_i in multiplier] + [0] * (len(multiplicand) - 1 - i)
 
         # Дополняем нулями слева
