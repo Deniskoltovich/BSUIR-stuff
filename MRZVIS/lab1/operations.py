@@ -6,9 +6,6 @@
 '''
 
 
-NUM_SIZE = 4
-
-
 def binary_addition(num1: list, num2: list):
     result = []
     carry = 0
@@ -32,7 +29,7 @@ def binary_addition(num1: list, num2: list):
 
 def binary_multiplication_generator(multiplier, multiplicand):
     if multiplier == [None] or multiplicand == [None]:
-        for _ in range(NUM_SIZE):
+        while True:
             yield None, None
 
     partial_addition = [0] * 8

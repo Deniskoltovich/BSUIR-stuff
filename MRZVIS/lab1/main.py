@@ -10,12 +10,13 @@ from pipe import Pipe
 
 def main():
     pairs = []
+    num_size = int(input('Введите размерность чисел: '))
     num_of_pairs = int(input('Введите кол-во пар: '))
     for i in range(num_of_pairs):
         pair = input(f'Введите пару {i + 1} через пробел:\n').split()
         try:
-            if any(len(item) != 4 or int(item, 2) > 15 for item in pair):
-                raise RuntimeError('Введите 4-разрядное число')
+            if any(len(item) != num_size or int(item, 2) > 2**num_size - 1 for item in pair):
+                raise RuntimeError(f'Введите {num_size}-разрядное число')
         except ValueError:
             raise RuntimeError('Некорректное число!')
 
@@ -24,7 +25,7 @@ def main():
             continue
         pairs.append([list(map(int, item)) for item in pair])
 
-    pipe = Pipe(*pairs)
+    pipe = Pipe(*pairs, num_size=num_size)
     while True:
         print(pipe)
         pipe.next_step()

@@ -9,7 +9,7 @@
 from dataclasses import dataclass
 from typing import Generator
 
-from operations import binary_multiplication_generator
+from lab1.operations import binary_multiplication_generator
 
 
 @dataclass
@@ -28,12 +28,14 @@ class PipeItem:
 
 
 class Pipe:
-    def __init__(self, *pairs):
+    def __init__(self, *pairs, num_size: int):
         self.pairs = pairs
         self.pairs_gen = list(binary_multiplication_generator(*pair) for pair in self.pairs)
-        self.pipeline: list[PipeItem] = [PipeItem()] * 4
+        self.pipeline: list[PipeItem] = [PipeItem()] * num_size
         self.result = list()
         self.step = 0
+        self.is_done = False
+        self.steps_to_complete = 0
 
     def next_step(self):
         try:
@@ -44,10 +46,11 @@ class Pipe:
         self.pipeline = [PipeItem(new_pair)] + self.pipeline
         result = self.pipeline.pop()
         if result:
-            self.result.append(result.partial_addition)
+            self.result.append((result.partial_addition, self.step))
             if len(self.pairs) == len(self.result):
+                self.is_done = True
+                self.steps_to_complete = self.step
                 return
-
 
         for i in range(len(self.pipeline)):
             if self.pipeline[i]:
@@ -80,8 +83,8 @@ class Pipe:
         representation += "\nРезультат:\n"
         for i in range(len(self.pairs)):
             try:
-                tmp = "".join(map(str, self.result[i]))
-                representation += f'{i + 1} - {int(tmp, 2)}={tmp}\n'
+                tmp = "".join(map(str, self.result[i][0]))
+                representation += f'{i + 1} - {int(tmp, 2)}={tmp}\tTaкт: {self.result[i][1]}\n'
             except (IndexError, ValueError, TypeError):
                 representation += f'{i + 1} - ---\n'
 
